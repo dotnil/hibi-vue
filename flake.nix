@@ -1,6 +1,6 @@
 {
-  description = "habits-vue";
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  description = "hibi-vue";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/25.11";
 
   outputs = {
     self,
@@ -12,32 +12,8 @@
     in {
       devShell = pkgs.mkShell {
         buildInputs = [
-          pkgs.nodejs_20
+          pkgs.nodejs_24
         ];
-
-        shellHook = ''
-          export VITE_BACK=http://habits.lcl:5000
-        '';
-      };
-
-      packages.default = pkgs.buildNpmPackage {
-        name = "habits-vue";
-
-        buildInputs = with pkgs; [
-          nodejs_20
-        ];
-
-        src = self;
-
-        npmDepsHash = "sha256-Nvb6TkkCiOA68G27mq549hKlEz4mWBuzVia8dpMKmwI=";
-
-        VITE_BACK = "https://api.habits.rusty-cluster.net";
-        npmBuild = "npm run build";
-
-        installPhase = ''
-          mkdir $out
-          cp -r dist/* $out/
-        '';
       };
     });
 }
