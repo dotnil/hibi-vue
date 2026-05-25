@@ -14,6 +14,7 @@
         buildInputs = [
           pkgs.nodejs_24
         ];
+        VITE_BACK = "http://localhost:3003";
       };
     });
 }
