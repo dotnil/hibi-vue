@@ -1,12 +1,12 @@
 const back = import.meta.env.VITE_BACK
 
-export const createTask = async task => {
+export const createHabit = async habit => {
   try {
-    const response = await fetch(`${back}/tasks`, {
+    const response = await fetch(`${back}/habits`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(task),
+      body: JSON.stringify(habit),
     })
 
     const data = await response.json()

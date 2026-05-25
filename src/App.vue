@@ -2,12 +2,12 @@
   <main>
     <h1>hibi</h1>
 
-    <TaskForm />
+    <HabitForm />
   </main>
 </template>
 
 <script setup>
-import TaskForm from './components/TaskForm.vue'
+import HabitForm from './components/HabitForm.vue'
 </script>
 
 <style scoped>
