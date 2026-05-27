@@ -2,13 +2,37 @@
   <main>
     <h1>hibi</h1>
 
-    <HabitForm />
+    <HabitForm @habitCreated="onHabitCreated" />
+    <HabitList :habits="habits" />
   </main>
 </template>
 
 <script setup>
-import HabitForm from './components/HabitForm.vue'
-</script>
+import { ref, onMounted } from 'vue'
 
-<style scoped>
-</style>
+import HabitForm from './components/HabitForm.vue'
+import HabitList from './components/HabitList.vue'
+
+import { createHabit, list } from './api-client/habits.js'
+
+const habits = ref([])
+
+const loadHabits = async () => habits.value = await list()
+
+onMounted(async () => {
+  await loadHabits()
+})
+
+const onHabitCreated = async (habit) => {
+  console.log('🐖 habitCreated')
+
+  try {
+    await createHabit(habit)
+
+    await loadHabits()
+
+  } catch (error) {
+    console.error('DB error:', error)
+  }
+}
+</script>

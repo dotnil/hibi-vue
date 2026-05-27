@@ -1,30 +1,27 @@
 <template>
   <form @submit.prevent='handleSubmit'>
-    <input v-model='title' type='text' placeholder='habit title'>
+    <input v-model='name' type='text' placeholder='habit name'>
     <button type='submit'>save</button>
   </form>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { createHabit } from '@/backend/habits.js'
 
-const title = ref('')
+const emit = defineEmits(['habitCreated'])
 
-const handleSubmit = async () => {
-  const habitPayload = {
-    title: title.value,
+const name = ref('')
+
+const handleSubmit = () => {
+  const habit = {
+    name: name.value,
     status: true
   }
 
-  try {
-    const habit = await createHabit(habitPayload)
-    console.log(habit)
-  } catch (error) {
-    console.error(`💩${error}`)
-  }
-}
+  emit('habitCreated', habit)
 
+  name.value = ''
+}
 </script>
 
 <style scoped>
