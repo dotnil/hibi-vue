@@ -6,13 +6,14 @@
     >
       {{ habit.name }}
 
+    <button @click="emit('habitUpdated', habit)">update</button>
     <button @click="emit('habitDeleted', habit)">delete</button>
     </li>
   </ul>
 </template>
 
 <script setup>
-const emit = defineEmits(['habitDeleted'])
+const emit = defineEmits(['habitUpdated', 'habitDeleted'])
 
 defineProps({
   habits: {

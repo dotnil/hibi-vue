@@ -6,6 +6,7 @@
     <HabitList
       :habits="habits"
       @habitDeleted="onHabitDeleted"
+      @habitUpdated="onHabitUpdated"
     />
   </main>
 </template>
@@ -16,9 +17,11 @@ import { ref, onMounted } from 'vue'
 import HabitForm from './components/HabitForm.vue'
 import HabitList from './components/HabitList.vue'
 
-import { createHabit, list, deleteHabit } from './api-client/habits.js'
+import { createHabit, list, updateHabit, deleteHabit } from './api-client/habits.js'
 
 const habits = ref([])
+const editingHabit = ref(null)
+const editingName = ref('')
 
 const loadHabits = async () => habits.value = await list()
 
@@ -36,6 +39,22 @@ const onHabitCreated = async (habit) => {
 
   } catch (error) {
     console.error('DB error:', error)
+  }
+}
+
+const onHabitUpdated = async (habit) => {
+  console.log('✏️')
+  console.log(habit)
+
+  habit.name = 'new name'
+
+  try {
+    await updateHabit(habit)
+
+    await loadHabits()
+
+  } catch (error) {
+    console.error(error)
   }
 }
 

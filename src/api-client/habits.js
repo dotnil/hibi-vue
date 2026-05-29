@@ -19,6 +19,22 @@ export const createHabit = async habit => {
   }
 }
 
+export const updateHabit = async habit => {
+  try {
+    const response = await fetch(`${back}/habits/${habit.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(habit),
+    })
+
+    const data = await response.json()
+
+    return data
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
 export const list = async () => {
   console.log('LIST CALLED')
   try {
