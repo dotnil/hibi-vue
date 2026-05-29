@@ -43,10 +43,8 @@ const onHabitCreated = async (habit) => {
 }
 
 const onHabitUpdated = async (habit) => {
-  console.log('✏️')
+  console.log('✏️ received update event')
   console.log(habit)
-
-  habit.name = 'new name'
 
   try {
     await updateHabit(habit)
@@ -54,7 +52,7 @@ const onHabitUpdated = async (habit) => {
     await loadHabits()
 
   } catch (error) {
-    console.error(error)
+    console.error('update failed:', error)
   }
 }
 
