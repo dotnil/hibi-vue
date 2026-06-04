@@ -15,7 +15,7 @@ const name = ref('')
 const handleSubmit = () => {
   const habit = {
     name: name.value,
-    status: true
+    active: true
   }
 
   emit('habitCreated', habit)
@@ -27,5 +27,6 @@ const handleSubmit = () => {
 <style scoped>
 form {
   display: flex;
+  margin: 20px;
 }
 </style>

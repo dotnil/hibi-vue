@@ -25,6 +25,7 @@ export const updateHabit = async (habit) => {
 
     const response = await fetch(`${back}/habits/${habit.id}`, {
       method: 'PATCH',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     })
@@ -40,7 +41,9 @@ export const updateHabit = async (habit) => {
 export const list = async () => {
   console.log('LIST CALLED')
   try {
-    const response = await fetch(`${back}/habits`)
+    const response = await fetch(`${back}/habits`, {
+      credentials: 'include',
+    })
     const data = await response.json()
 
     return data
@@ -53,6 +56,7 @@ export const deleteHabit = async id => {
   try {
     const response = await fetch(`${back}/habits/${id}`, {
       method: 'DELETE',
+      credentials: 'include',
     })
 
     const data = await response.json()
