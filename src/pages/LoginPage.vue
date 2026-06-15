@@ -13,10 +13,13 @@ const router = useRouter()
 const onLogin = async credentials => {
   try {
     const result = await login(credentials)
+
     console.log('🐖 mr.Hryak logged in')
     console.log(result)
+
     router.push('/')
-  } catch (error) {
+
+} catch (error) {
     console.error(error)
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li v-for="habit in habits" :key="habit.id" class="row">
+    <li v-for="habit in habits" :key="habit.id" class="row card">
 
       <div v-if="editingId !== habit.id">
         {{ habit.name }}
@@ -53,5 +53,9 @@ defineProps({
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+ul {
+margin: 20px;
 }
 </style>

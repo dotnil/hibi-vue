@@ -1,6 +1,7 @@
 <template>
-  <main>
-    <h1>hibi</h1>
-    <router-view />
-  </main>
+  <RouterView />
 </template>
+
+<script setup>
+import { RouterView } from 'vue-router'
+</script>

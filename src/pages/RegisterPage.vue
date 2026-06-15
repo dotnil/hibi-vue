@@ -5,8 +5,11 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
 import RegisterForm from '../components/RegisterForm.vue'
 import { createUser } from '../api-client/users.js'
+
+const router = useRouter()
 
 const onRegister = async credentials => {
   try {
@@ -14,6 +17,7 @@ const onRegister = async credentials => {
 
     console.log('🐖 mr.Hryak registered')
     console.log(user)
+    await router.push('/login')
 
   } catch (error) {
     console.error(error)
