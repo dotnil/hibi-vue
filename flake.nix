@@ -26,7 +26,7 @@
 
         src = self;
 
-        npmDepsHash = "sha256-8brStCdI6AepF52UOn+opOAXQ6goRwzGThkdMFIgiuA=";
+        npmDepsHash = "sha256-YeISpYgwYmDVni0xyxtsniN9a5RSeNEVtGvWeLCTNH4=";
 
         VITE_BACK = "https://api.hibiflow.ru";
         npmBuild = "npm run build";
