@@ -16,5 +16,25 @@
         ];
         VITE_BACK = "http://localhost:3003";
       };
+
+      packages.default = pkgs.buildNpmPackage {
+        name = "hibi-vue";
+
+        buildInputs = with pkgs; [
+          nodejs_24
+        ];
+
+        src = self;
+
+        npmDepsHash = "sha256-8brStCdI6AepF52UOn+opOAXQ6goRwzGThkdMFIgiuA=";
+
+        VITE_BACK = "https://api.hibiflow.ru";
+        npmBuild = "npm run build";
+
+        installPhase = ''
+          mkdir $out
+          cp -r dist/* $out/
+        '';
+      };
     });
 }
