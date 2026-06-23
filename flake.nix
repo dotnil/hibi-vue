@@ -1,6 +1,6 @@
 {
   description = "hibi-vue";
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/25.11";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/26.05";
 
   outputs = {
     self,
