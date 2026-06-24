@@ -34,3 +34,24 @@ export const login = async credentials => {
     return Promise.reject(error)
   }
 }
+
+export const getCurrentUser = async () => {
+  const response = await fetch(`${import.meta.env.VITE_BACK}/sessions/current`, {
+    credentials: 'include',
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) { return null }
+
+  return data
+}
+
+export const logout = async () => {
+  const response = await fetch(`${import.meta.env.VITE_BACK}/logout`, {
+    method: 'POST',
+    credentials: 'include',
+  })
+
+  return response.json()
+}
