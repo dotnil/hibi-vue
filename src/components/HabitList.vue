@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li v-for="habit in habitsWeek" :key="habit.id" class="row card">
+    <li v-for="habit in habits" :key="habit.id" class="row card">
 
       <div v-if="editingId !== habit.id">
         {{ habit.name }}
@@ -28,12 +28,11 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { createMetric } from '../api-client/metrics'
 
 const emit = defineEmits([
   'habitUpdated',
   'habitDeleted',
-  'refreshMetrics'
+  'dayClicked',
 ])
 
 const props = defineProps({
@@ -59,60 +58,14 @@ const save = (habit) => {
   editingName.value = ''
 }
 
-const calcWeekDays = (now) => {
-  const monday = new Date(now)
-  const dayOfWeek = monday.getDay()
-
-  const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
-
-  monday.setDate(monday.getDate() + offset)
-  monday.setHours(0, 0, 0, 0)
-
-  return Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(monday)
-    date.setDate(monday.getDate() + i)
-    return date
-  })
-}
-
-const days = calcWeekDays(new Date())
-
-const makeHabitsWeek = (habits, metrics, days) => {
-  return habits.map(habit => ({
-    ...habit,
-    metrics: days.map(day => {
-      const found = metrics.find(m =>
-        Number(m.habit_id) === Number(habit.id) &&
-        m.date.slice(0, 10) === day.toISOString().slice(0, 10)
-      )
-
-      return found ? found.value : false
-    })
-  }))
-}
-
-const habitsWeek = computed(() =>
-  makeHabitsWeek(props.habits, props.metrics, days)
-)
-
-const onDayClick = async (habit, index) => {
-  const date = days[index]
+const onDayClick = (habit, index) => {
   const value = !habit.metrics[index]
 
-  try {
-    const res = await createMetric({
-      habit_id: habit.id,
-      date: date.toISOString().slice(0, 10),
-      value,
-    })
-
-    console.log('🐗 saved', res.status)
-
-    emit('refreshMetrics')
-
-  } catch (error) {
-    console.error('💩 error', error)
-  }
+  emit('dayClicked', {
+    habit,
+    metricIndex: index,
+    value,
+  })
 }
 </script>
 
