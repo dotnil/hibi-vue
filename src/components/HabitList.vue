@@ -37,6 +37,7 @@ const emit = defineEmits([
 
 const props = defineProps({
   habits: Array,
+  // TODO: check if used
   metrics: Array,
 })
 
