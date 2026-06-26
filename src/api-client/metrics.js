@@ -13,10 +13,13 @@ export const createMetric = async payload => {
   return response
 }
 
-export const listMetrics = async () => {
-  const response = await fetch(`${back}/metrics`, {
-    credentials: 'include',
-  })
+export const listMetrics = async (start, end) => {
+  const response = await fetch(
+    `${back}/metrics?start=${start}&end=${end}`,
+    {
+      credentials: 'include',
+    }
+  )
 
   return response.json()
 }
