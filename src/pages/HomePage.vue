@@ -53,8 +53,8 @@ const loadMetrics = async () => {
 }
 
 onMounted(async () => {
-  await loadHabits()
   await loadMetrics()
+  await loadHabits()
   await loadUser()
 })
 
