@@ -4,14 +4,13 @@
 
 body {
   margin: 0;
-  background: #f7f7f7;
+  background: #FFFFFF;
   color: #111827;
   font-family:
     Inter,
     system-ui,
     sans-serif;
 
-  background: #F5F7FA;
 }
 
 main {
@@ -51,37 +50,13 @@ input {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
 
-  background: white;
+  background: #f5f7fa;
   font-size: 16px;
 }
 
 input:focus {
   outline: none;
   border-color: #ddea7c;
-}
-
-button {
-  height: 44px;
-  padding: 0 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  cursor: pointer;
-  background: transparent;
-  color: #6B7280;
-  border: 1px solid #E5E7EB;
-}
-
-button:hover {
-  opacity: 0.9;
-  background:  #ddea7c;
-}
-
-.card {
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.08);
-  background: #FFFFFF;
-  border-radius: 14px;
-  padding: 14px 16px;
 }
 
 ul {
