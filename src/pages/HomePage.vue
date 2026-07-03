@@ -3,6 +3,7 @@
 
   <HabitList
     :habits="habitsWeek"
+    :days="week.days"
     @habitDeleted="onHabitDeleted"
     @habitUpdated="onHabitUpdated"
     @dayClicked="onDayClicked"
