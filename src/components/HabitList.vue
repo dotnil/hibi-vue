@@ -1,83 +1,217 @@
 <template>
-  <ul>
-    <li v-for="habit in habits" :key="habit.id" class="row card">
+  <div class="habit-table">
+    <div class="habit-table__header">
+      <div class="habit-name"></div>
+      <div class="habit-actions"></div>
+      <div>Mo</div>
+      <div>Tu</div>
+      <div>We</div>
+      <div>Th</div>
+      <div>Fr</div>
+      <div>Sa</div>
+      <div>Su</div>
+    </div>
 
-      <div v-if="editingId !== habit.id">
-        {{ habit.name }}
-        <button @click="startEdit(habit)">update</button>
+    <div v-for="habit in habits" :key="habit.id" class="habit-table__row">
+      <div class="habit-name">
+        <span
+          v-if="editingId !== habit.id" 
+          @click="startEdit(habit)"
+          class="habit-name-text"
+          >
+          {{ habit.name }}
+        </span>
+
+          <input
+          v-else
+          ref="inputRef"
+          v-model="editingName"
+          @keydown.enter.prevent="save"
+          @keydown.esc.prevent="cancelEdit"
+          @blur="save"
+          class="edit-input"
+          />
       </div>
 
-      <div v-else>
-        <input v-model="editingName" />
-        <button @click="save(habit)">save</button>
+      <div class="habit-actions">
+        <button
+          v-if="editingId !== habit.id"
+          class="icon-button icon-button--edit"
+          @click="startEdit(habit)"
+        />
+        <button
+          v-else
+          class="icon-button icon-button--done"
+          @click="save"
+        />
+        <button
+          class="icon-button icon-button--delete"
+          @click="emit('habitDeleted', habit)"
+        />
       </div>
 
-      <button @click="emit('habitDeleted', habit)">delete</button>
-
-      <div
+      <div 
+        class="habit-day"
         v-for="(metric, index) in habit.metrics"
         :key="index"
         @click="onDayClick(habit, index)"
       >
         {{ metric ? '●' : '○' }}
       </div>
-
-    </li>
-  </ul>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, nextTick } from 'vue'
 
-const emit = defineEmits([
-  'habitUpdated',
-  'habitDeleted',
-  'dayClicked',
-])
-
-const props = defineProps({
-  habits: Array,
-  // TODO: check if used
-  metrics: Array,
-})
+const emit = defineEmits(['habitUpdated', 'habitDeleted', 'dayClicked'])
+const props = defineProps({ habits: Array })
 
 const editingId = ref(null)
 const editingName = ref('')
+const inputRef = ref(null)
 
 const startEdit = (habit) => {
   editingId.value = habit.id
   editingName.value = habit.name
+
+  nextTick(() => {
+    setTimeout(() => {
+      const inputs = document.querySelectorAll('.edit-input')
+      const currentInput = Array.from(inputs).find(input => 
+        input.value === editingName.value
+      )
+
+      if (currentInput) {
+        currentInput.focus()
+        currentInput.select()
+      }
+    }, 50)
+  })
 }
 
-const save = (habit) => {
-  emit('habitUpdated', {
-    ...habit,
-    name: editingName.value
-  })
+const cancelEdit = () => {
+  editingId.value = null
+  editingName.value = ''
+}
+
+const save = () => {
+  const name = editingName.value.trim()
+
+  if (name && editingId.value) {
+    emit('habitUpdated', {
+      id: editingId.value,
+      name: name
+    })
+  }
 
   editingId.value = null
   editingName.value = ''
 }
 
 const onDayClick = (habit, index) => {
-  const value = !habit.metrics[index]
-
   emit('dayClicked', {
     habit,
     metricIndex: index,
-    value,
+    value: !habit.metrics[index]
   })
 }
 </script>
 
 <style scoped>
-.row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.habit-table {
+  margin: 20px;
 }
 
-ul {
-  margin: 20px;
+.habit-table__row,
+.habit-table__header {
+  display: grid;
+  grid-template-columns: minmax(120px, 2fr) minmax(70px, 0.5fr) repeat(7, 0.5fr);
+  min-height: 68px;
+  align-items: center;
+  gap: 8px;
+}
+
+.habit-table__header {
+  font-weight: bold;
+  padding: 14px 14px;
+}
+
+.habit-table__row {
+  margin: 20px 0;
+  background: #f5f7fa;
+  border-radius: 14px;
+  padding: 20px 14px;
+  transition: all 0.2s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.habit-table__row:hover {
+  transform: translateY(-2px);
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+}
+
+.habit-name-text {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.habit-name-text:hover {
+  background: #f5f5f5;
+}
+
+.edit-input {
+  width: 100%;
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 4px 8px;
+  border-radius: 6px;
+  outline: none;
+}
+
+.habit-day {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.22s ease;
+  transform-origin: center center;
+border-radius: 50%;
+}
+
+.habit-day:hover {
+  transform: scale(1.35);
+}
+
+.icon-button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icon-button:hover {
+  transform: scale(1.25);
+}
+
+.icon-button--edit {
+  background: url("@/assets/icons/edit-25.svg") no-repeat center;
+  background-size: contain;
+}
+
+.icon-button--done {
+  background: url("@/assets/icons/done-25.svg") no-repeat center;
+  background-size: contain;
+}
+
+.icon-button--delete {
+  background: url("@/assets/icons/delete-25.svg") no-repeat center;
+  background-size: contain;
 }
 </style>

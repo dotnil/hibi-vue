@@ -3,7 +3,6 @@
 
   <HabitList
     :habits="habitsWeek"
-    :metrics="metrics"
     @habitDeleted="onHabitDeleted"
     @habitUpdated="onHabitUpdated"
     @dayClicked="onDayClicked"
@@ -133,5 +132,21 @@ const habitsWeek = computed(() =>
   margin: 20px;
   display: flex;
   justify-content: space-between;
+}
+
+button {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  background: transparent;
+  color: #6B7280;
+  border: 1px solid #E5E7EB;
+}
+
+button:hover {
+  opacity: 0.9;
+  background:  #ddea7c;
 }
 </style>
