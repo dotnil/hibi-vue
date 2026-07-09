@@ -6,6 +6,7 @@
         v-for="day in days"
         :key="day.toISOString()"
         class="header-day"
+        :class="{ 'header-day--today': isToday(day) }"
         >
         <div>{{ day.getDate() }}</div>
         <div>{{ formatWeekday(day) }}</div>
@@ -13,8 +14,6 @@
     </div>
 
     <div v-for="habit in habits" :key="habit.id" class="habit-table__row">
-
-
 
       <div class="habit-name">
         <span
@@ -60,7 +59,10 @@
         :key="index"
         @click="onDayClick(habit, index)"
       >
-        {{ metric ? '●' : '○' }}
+      <div
+        class="metric"
+        :class="{ 'metric--done': metric }"
+        />
       </div>
     </div>
   </div>
@@ -117,6 +119,10 @@ const save = () => {
   editingName.value = ''
 }
 
+const isToday = (date) => {
+  return date.toDateString() === new Date().toDateString()
+}
+
 const formatWeekday = (date) =>
   date
     .toLocaleDateString('en', {
@@ -158,16 +164,32 @@ const onDayClick = (habit, index) => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: #7f7f7f;
 }
 
 .header-day :first-child {
+  font-weight: 300;
   font-size: 18px;
-  font-weight: 600;
 }
 
 .header-day :last-child {
+  font-weight: 300;
   font-size: 12px;
   color: #6B7280;
+}
+
+.header-day--today {
+  font-weight: 700;
+  color: #111827;
+}
+
+.header-day--today :first-child {
+  font-weight: 700;
+}
+
+.header-day--today :last-child {
+  font-weight: 700;
+  color: #111827;
 }
 
 .habit-table__row {
@@ -179,8 +201,7 @@ const onDayClick = (habit, index) => {
 }
 
 .habit-table__row:hover {
-  transform: translateY(-2px);
-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
 }
 
 .habit-name {
@@ -214,11 +235,20 @@ box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
 
 .edit-input {
   width: 100%;
-  font-size: inherit;
-  font-weight: inherit;
-  padding: 4px 8px;
-  border-radius: 6px;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
   outline: none;
+  background: transparent;
+
+  padding: 4px 8px;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  height: 20px;
+  box-sizing: border-box;
 }
 
 .habit-day {
@@ -230,10 +260,6 @@ box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
   cursor: pointer;
   transition: transform 0.22s ease;
   transform-origin: center center;
-}
-
-.habit-day:hover {
-  transform: scale(1.35);
 }
 
 .icon-button {
@@ -262,5 +288,23 @@ box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
 .icon-button--delete {
   background: url("@/assets/icons/delete-25.svg") no-repeat center;
   background-size: contain;
+}
+
+.metric {
+  width: 18px;
+  height: 18px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+
+  transition: .15s;
+}
+
+.metric--done {
+  background: #cbd5e1;
+}
+
+.metric:hover {
+  transform: scale(1.12);
 }
 </style>

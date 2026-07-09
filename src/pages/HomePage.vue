@@ -9,7 +9,7 @@
     @dayClicked="onDayClicked"
   />
   <div class='logged' v-if="currentUser">
-    <p>logged in as: {{ currentUser.email }}</p>
+    <p>{{ currentUser.email }}</p>
     <button @click="onLogout">logout</button>
   </div>
 </template>
@@ -33,6 +33,7 @@ import HabitList from '../components/HabitList.vue'
 const habits = ref([])
 const currentUser = ref(null)
 const metrics = ref([])
+
 
 const route = useRoute()
 const router = useRouter()
