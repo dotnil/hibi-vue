@@ -41,6 +41,10 @@ const closeForm = () => {
   name.value = ''
   isFormOpen.value = false
 }
+
+defineExpose({
+  open: openForm,
+})
 </script>
 
 <style scoped>

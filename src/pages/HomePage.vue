@@ -1,5 +1,8 @@
 <template>
-  <HabitForm @habitCreated="onHabitCreated" />
+  <HabitForm
+    ref="habitFormRef"
+    @habitCreated="onHabitCreated"
+  />
 
   <HabitList
     :habits="habitsWeek"
@@ -33,7 +36,7 @@ import HabitList from '../components/HabitList.vue'
 const habits = ref([])
 const currentUser = ref(null)
 const metrics = ref([])
-
+const habitFormRef = ref(null)
 
 const route = useRoute()
 const router = useRouter()
@@ -75,6 +78,11 @@ const onLogout = async () => {
     console.error(error)
   }
 }
+
+const openHabitForm = () => {
+  habitFormRef.value?.open()
+}
+
 const onHabitCreated = async (habit) => {
   try {
     await createHabit(habit)
