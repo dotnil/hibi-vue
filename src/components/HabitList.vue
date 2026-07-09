@@ -2,17 +2,19 @@
   <div class="habit-table">
     <div class="habit-table__header">
       <div class="habit-name"></div>
-      <div class="habit-actions"></div>
-      <div>Mo</div>
-      <div>Tu</div>
-      <div>We</div>
-      <div>Th</div>
-      <div>Fr</div>
-      <div>Sa</div>
-      <div>Su</div>
+      <div
+        v-for="day in days"
+        :key="day.toISOString()"
+        class="header-day"
+        :class="{ 'header-day--today': isToday(day) }"
+        >
+        <div>{{ day.getDate() }}</div>
+        <div>{{ formatWeekday(day) }}</div>
+      </div>
     </div>
 
     <div v-for="habit in habits" :key="habit.id" class="habit-table__row">
+
       <div class="habit-name">
         <span
           v-if="editingId !== habit.id" 
@@ -31,24 +33,25 @@
           @blur="save"
           class="edit-input"
           />
+
+        <div class="habit-actions">
+          <button
+            v-if="editingId !== habit.id"
+            class="icon-button icon-button--edit"
+            @click="startEdit(habit)"
+          />
+          <button
+            v-else
+            class="icon-button icon-button--done"
+            @click="save"
+          />
+          <button
+            class="icon-button icon-button--delete"
+            @click="emit('habitDeleted', habit)"
+          />
+        </div>
       </div>
 
-      <div class="habit-actions">
-        <button
-          v-if="editingId !== habit.id"
-          class="icon-button icon-button--edit"
-          @click="startEdit(habit)"
-        />
-        <button
-          v-else
-          class="icon-button icon-button--done"
-          @click="save"
-        />
-        <button
-          class="icon-button icon-button--delete"
-          @click="emit('habitDeleted', habit)"
-        />
-      </div>
 
       <div 
         class="habit-day"
@@ -56,7 +59,10 @@
         :key="index"
         @click="onDayClick(habit, index)"
       >
-        {{ metric ? '●' : '○' }}
+      <div
+        class="metric"
+        :class="{ 'metric--done': metric }"
+        />
       </div>
     </div>
   </div>
@@ -66,7 +72,10 @@
 import { ref, nextTick } from 'vue'
 
 const emit = defineEmits(['habitUpdated', 'habitDeleted', 'dayClicked'])
-const props = defineProps({ habits: Array })
+const props = defineProps({
+  habits: Array,
+  days: Array
+})
 
 const editingId = ref(null)
 const editingName = ref('')
@@ -110,6 +119,17 @@ const save = () => {
   editingName.value = ''
 }
 
+const isToday = (date) => {
+  return date.toDateString() === new Date().toDateString()
+}
+
+const formatWeekday = (date) =>
+  date
+    .toLocaleDateString('en', {
+      weekday: 'short'
+    })
+    .slice(0, 2)
+
 const onDayClick = (habit, index) => {
   emit('dayClicked', {
     habit,
@@ -127,7 +147,9 @@ const onDayClick = (habit, index) => {
 .habit-table__row,
 .habit-table__header {
   display: grid;
-  grid-template-columns: minmax(120px, 2fr) minmax(70px, 0.5fr) repeat(7, 0.5fr);
+  grid-template-columns:
+    minmax(180px, 2fr)
+    repeat(7, 0.5fr);
   min-height: 68px;
   align-items: center;
   gap: 8px;
@@ -135,12 +157,43 @@ const onDayClick = (habit, index) => {
 
 .habit-table__header {
   font-weight: bold;
-  padding: 14px 14px;
+  padding: 20px 14px;
+}
+
+.header-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #7f7f7f;
+}
+
+.header-day :first-child {
+  font-weight: 300;
+  font-size: 18px;
+}
+
+.header-day :last-child {
+  font-weight: 300;
+  font-size: 12px;
+  color: #6B7280;
+}
+
+.header-day--today {
+  font-weight: 700;
+  color: #111827;
+}
+
+.header-day--today :first-child {
+  font-weight: 700;
+}
+
+.header-day--today :last-child {
+  font-weight: 700;
+  color: #111827;
 }
 
 .habit-table__row {
   margin: 20px 0;
-  background: #f5f7fa;
   border-radius: 14px;
   padding: 20px 14px;
   transition: all 0.2s ease;
@@ -148,8 +201,14 @@ const onDayClick = (habit, index) => {
 }
 
 .habit-table__row:hover {
-  transform: translateY(-2px);
-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+}
+
+.habit-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .habit-name-text {
@@ -162,42 +221,58 @@ box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
   background: #f5f5f5;
 }
 
+.habit-actions {
+  display: flex;
+  gap: 8px;
+
+  opacity: 0;
+  transition: opacity .15s;
+}
+
+.habit-table__row:hover .habit-actions {
+  opacity: 1;
+}
+
 .edit-input {
   width: 100%;
-  font-size: inherit;
-  font-weight: inherit;
-  padding: 4px 8px;
-  border-radius: 6px;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
   outline: none;
+  background: transparent;
+
+  padding: 4px 8px;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  height: 20px;
+  box-sizing: border-box;
 }
 
 .habit-day {
-  width: 28px;
-  height: 28px;
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   font-size: 20px;
   cursor: pointer;
   transition: transform 0.22s ease;
   transform-origin: center center;
-border-radius: 50%;
-}
-
-.habit-day:hover {
-  transform: scale(1.35);
 }
 
 .icon-button {
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   border: none;
   cursor: pointer;
   transition: transform 0.2s;
+  opacity: .55;
 }
 
 .icon-button:hover {
-  transform: scale(1.25);
+  opacity: 1;
 }
 
 .icon-button--edit {
@@ -213,5 +288,23 @@ border-radius: 50%;
 .icon-button--delete {
   background: url("@/assets/icons/delete-25.svg") no-repeat center;
   background-size: contain;
+}
+
+.metric {
+  width: 18px;
+  height: 18px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+
+  transition: .15s;
+}
+
+.metric--done {
+  background: #cbd5e1;
+}
+
+.metric:hover {
+  transform: scale(1.12);
 }
 </style>
