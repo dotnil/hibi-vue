@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="icon-menu-20.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="true"
+     inkscape:zoom="9.6958545"
+     inkscape:cx="23.308931"
+     inkscape:cy="24.804415"
+     inkscape:window-width="1280"
+     inkscape:window-height="720"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="-0.0083007822"
+       originy="-0.0082998248"
+       spacingx="0.26458333"
+       spacingy="0.26458333"
+       empcolor="#e500d2"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="10"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-0.00830078,-0.00829983)">
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.15689;stroke-linecap:round;stroke-linejoin:round"
+       id="rect1"
+       width="16.289656"
+       height="0.24711418"
+       x="4.2122126"
+       y="9.1112118" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.15689;stroke-linecap:round;stroke-linejoin:round"
+       id="rect1-2"
+       width="16.289656"
+       height="0.24711418"
+       x="4.2167358"
+       y="14.777334" />
+  </g>
+</svg>

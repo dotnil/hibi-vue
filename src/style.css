@@ -61,4 +61,18 @@ a:hover {
   text-decoration: underline;
 }
 
+button {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  background: transparent;
+  color: #6B7280;
+  border: 0;
+}
+
+button:hover {
+  opacity: 0.9;
+  background:  #ddea7c;
+}
 

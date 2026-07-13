@@ -1,5 +1,10 @@
 <template>
-  <HabitForm @habitCreated="onHabitCreated" />
+  <Header
+    :currentUser="currentUser"
+    @logout="onLogout"
+  >
+    <HabitForm @habitCreated="onHabitCreated" />
+  </Header>
 
   <HabitList
     :habits="habitsWeek"
@@ -8,10 +13,6 @@
     @habitUpdated="onHabitUpdated"
     @dayClicked="onDayClicked"
   />
-  <div class='logged' v-if="currentUser">
-    <p>{{ currentUser.email }}</p>
-    <button @click="onLogout">logout</button>
-  </div>
 </template>
 
 <script setup>
@@ -29,11 +30,11 @@ import { makeHabitsWeek } from '../utils/habitsWeek.js'
 
 import HabitForm from '../components/HabitForm.vue'
 import HabitList from '../components/HabitList.vue'
+import Header from '../components/Header.vue'
 
 const habits = ref([])
 const currentUser = ref(null)
 const metrics = ref([])
-
 
 const route = useRoute()
 const router = useRouter()
@@ -75,6 +76,7 @@ const onLogout = async () => {
     console.error(error)
   }
 }
+
 const onHabitCreated = async (habit) => {
   try {
     await createHabit(habit)
@@ -130,25 +132,4 @@ const habitsWeek = computed(() =>
 </script>
 
 <style scoped>
-.logged {
-  margin: 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-button {
-  height: 44px;
-  padding: 0 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  cursor: pointer;
-  background: transparent;
-  color: #6B7280;
-  border: 1px solid #E5E7EB;
-}
-
-button:hover {
-  opacity: 0.9;
-  background:  #ddea7c;
-}
 </style>

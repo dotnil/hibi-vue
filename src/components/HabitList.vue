@@ -141,14 +141,14 @@ const onDayClick = (habit, index) => {
 
 <style scoped>
 .habit-table {
-  margin: 20px;
+  margin: 0 20px;
 }
 
 .habit-table__row,
 .habit-table__header {
   display: grid;
   grid-template-columns:
-    minmax(180px, 2fr)
+    minmax(120px, 2fr)
     repeat(7, 0.5fr);
   min-height: 68px;
   align-items: center;
@@ -156,6 +156,12 @@ const onDayClick = (habit, index) => {
 }
 
 .habit-table__header {
+  position: sticky;
+  top: 64px;
+
+  z-index: 10;
+  background: white;
+  box-shadow: 0 1px 0 #e5e7eb;
   font-weight: bold;
   padding: 20px 14px;
 }
@@ -164,18 +170,9 @@ const onDayClick = (habit, index) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #7f7f7f;
-}
-
-.header-day :first-child {
-  font-weight: 300;
-  font-size: 18px;
-}
-
-.header-day :last-child {
-  font-weight: 300;
-  font-size: 12px;
   color: #6B7280;
+  font-weight: 300;
+  font-size: 10px;
 }
 
 .header-day--today {
@@ -252,7 +249,6 @@ const onDayClick = (habit, index) => {
 }
 
 .habit-day {
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -281,7 +277,7 @@ const onDayClick = (habit, index) => {
 }
 
 .icon-button--done {
-  background: url("@/assets/icons/done-25.svg") no-repeat center;
+  background: url("@/assets/icons/done-48.svg") no-repeat center;
   background-size: contain;
 }
 
@@ -291,17 +287,23 @@ const onDayClick = (habit, index) => {
 }
 
 .metric {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 
-  border: 1px solid #cbd5e1;
-  border-radius: 50%;
+  border: 0;
+  background: url("@/assets/icons/icon-circle-20.svg") no-repeat center;
+  background-size: contain;
 
   transition: .15s;
 }
 
 .metric--done {
-  background: #cbd5e1;
+  width: 20px;
+  height: 20px;
+
+  border: 0;
+  background: url("@/assets/icons/done-bold-48.svg") no-repeat center;
+  background-size: contain;
 }
 
 .metric:hover {
