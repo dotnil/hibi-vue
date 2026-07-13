@@ -15,57 +15,63 @@
 
     <div v-for="habit in habits" :key="habit.id" class="habit-table__row">
 
-      <div class="habit-name">
-        <span
-          v-if="editingId !== habit.id" 
-          @click="startEdit(habit)"
-          class="habit-name-text"
+      <div class="habit-row__days">
+        <div class="habit-progress"></div>
+
+        <div
+          class="habit-day"
+          v-for="(metric, index) in habit.metrics"
+          :key="index"
+          @click="onDayClick(habit, index)"
           >
-          {{ habit.name }}
-        </span>
-
-          <input
-          v-else
-          ref="inputRef"
-          v-model="editingName"
-          @keydown.enter.prevent="save"
-          @keydown.esc.prevent="cancelEdit"
-          @blur="save"
-          class="edit-input"
-          />
-
-        <div class="habit-actions">
-          <button
-            v-if="editingId !== habit.id"
-            class="icon-button icon-button--edit"
-            @click="startEdit(habit)"
-          />
-          <button
-            v-else
-            class="icon-button icon-button--done"
-            @click="save"
-          />
-          <button
-            class="icon-button icon-button--delete"
-            @click="emit('habitDeleted', habit)"
-          />
+          <div
+            class="metric"
+            :class="{ 'metric--done': metric }"
+            />
+          </div>
         </div>
-      </div>
 
+        <div class="habit-row__info">
+          <div class="habit-name">
+            <span
+              v-if="editingId !== habit.id"
+              @click="startEdit(habit)"
+              class="habit-name-text"
+              >
+              {{ habit.name }}
+            </span>
 
-      <div 
-        class="habit-day"
-        v-for="(metric, index) in habit.metrics"
-        :key="index"
-        @click="onDayClick(habit, index)"
-      >
-      <div
-        class="metric"
-        :class="{ 'metric--done': metric }"
-        />
+              <input
+              v-else
+              ref="inputRef"
+              v-model="editingName"
+              @keydown.enter.prevent="save"
+              @keydown.esc.prevent="cancelEdit"
+              @blur="save"
+              class="edit-input"
+              />
+
+              <div class="habit-actions">
+                <button
+                  v-if="editingId !== habit.id"
+                  class="icon-button icon-button--edit"
+                  @click="startEdit(habit)"
+                  />
+                  <button
+                    v-else
+                    class="icon-button icon-button--done"
+                    @click="save"
+                    />
+                    <button
+                      class="icon-button icon-button--delete"
+                      @click="emit('habitDeleted', habit)"
+                      />
+              </div>
+          </div>
+        </div>
+
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -142,20 +148,20 @@ const onDayClick = (habit, index) => {
 <style scoped>
 .habit-table {
   margin: 0 20px;
-}
 
-.habit-table__row,
-.habit-table__header {
-  display: grid;
-  grid-template-columns:
+  --habit-columns:
     minmax(120px, 2fr)
     repeat(7, 0.5fr);
+}
+
+.habit-table__header {
+  display: grid;
+  grid-template-columns: var(--habit-columns);
+
   min-height: 68px;
   align-items: center;
   gap: 8px;
-}
 
-.habit-table__header {
   position: sticky;
   top: 64px;
 
@@ -191,20 +197,48 @@ const onDayClick = (habit, index) => {
 
 .habit-table__row {
   margin: 20px 0;
-  border-radius: 14px;
   padding: 20px 14px;
-  transition: all 0.2s ease;
+
   border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  transition: box-shadow .2s ease;
 }
 
 .habit-table__row:hover {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  opacity: 1;
+}
+
+.habit-row__days {
+  display: grid;
+  grid-template-columns: var(--habit-columns);
+
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+}
+
+.habit-progress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.habit-row__info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 12px;
 }
 
 .habit-name {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  flex: 1;
   gap: 12px;
 }
 
@@ -223,7 +257,7 @@ const onDayClick = (habit, index) => {
   gap: 8px;
 
   opacity: 0;
-  transition: opacity .15s;
+  transition: opacity .15s ease;
 }
 
 .habit-table__row:hover .habit-actions {
@@ -234,7 +268,6 @@ const onDayClick = (habit, index) => {
   width: 100%;
 
   margin: 0;
-  padding: 0;
 
   border: 0;
   outline: none;
@@ -252,7 +285,6 @@ const onDayClick = (habit, index) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
   cursor: pointer;
   transition: transform 0.22s ease;
   transform-origin: center center;
@@ -294,19 +326,15 @@ const onDayClick = (habit, index) => {
   background: url("@/assets/icons/icon-circle-20.svg") no-repeat center;
   background-size: contain;
 
-  transition: .15s;
+  transition: transform .15s ease;
 }
 
 .metric--done {
-  width: 20px;
-  height: 20px;
-
-  border: 0;
-  background: url("@/assets/icons/done-bold-48.svg") no-repeat center;
-  background-size: contain;
+  background-image: url("@/assets/icons/done-bold-48.svg");
 }
 
 .metric:hover {
   transform: scale(1.12);
 }
+
 </style>
