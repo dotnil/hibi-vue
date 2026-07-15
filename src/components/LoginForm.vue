@@ -44,6 +44,6 @@ button {
 
 button:hover {
   opacity: 0.9;
-  background:  #ddea7c;
+  background: #ddea7c;
 }
 </style>

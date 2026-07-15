@@ -8,13 +8,12 @@ export const createHabit = async habit => {
     body: JSON.stringify(habit),
   })
 
-  const data = await response.json()
-
-  if (response.status !== 201) {
+  if (!response.ok) {
+    const data = await response.json()
     throw data
   }
 
-  return data
+  return response.json()
 }
 
 export const updateHabit = async habit => {
@@ -27,6 +26,11 @@ export const updateHabit = async habit => {
     body: JSON.stringify(payload),
   })
 
+  if (!response.ok) {
+    const data = await response.json()
+    throw data
+  }
+
   return response.json()
 }
 
@@ -34,6 +38,11 @@ export const listHabit = async () => {
   const response = await fetch(`${back}/habits`, {
     credentials: 'include',
   })
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw data
+  }
 
   return response.json()
 }
@@ -43,6 +52,11 @@ export const deleteHabit = async id => {
     method: 'DELETE',
     credentials: 'include',
   })
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw data
+  }
 
   return response.json()
 }

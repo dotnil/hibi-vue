@@ -7,6 +7,11 @@ export const createUser = async credentials => {
     body: JSON.stringify(credentials),
   })
 
+  if (!response.ok) {
+    const data = await response.json()
+    throw data
+  }
+
   return response.json()
 }
 
@@ -17,6 +22,11 @@ export const login = async credentials => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(credentials),
   })
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw data
+  }
 
   return response.json()
 }
@@ -40,6 +50,11 @@ export const logout = async () => {
     method: 'POST',
     credentials: 'include',
   })
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw data
+  }
 
   return response.json()
 }
