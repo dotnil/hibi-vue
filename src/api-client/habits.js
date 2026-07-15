@@ -1,69 +1,62 @@
 const back = import.meta.env.VITE_BACK
 
 export const createHabit = async habit => {
-  try {
-    const response = await fetch(`${back}/habits`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(habit),
-    })
+  const response = await fetch(`${back}/habits`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(habit),
+  })
 
+  if (!response.ok) {
     const data = await response.json()
-
-    if (response.status != 201) { throw data }
-
-    return data
-  } catch (error) {
-    return Promise.reject(error)
+    throw data
   }
+
+  return response.json()
 }
 
-export const updateHabit = async (habit) => {
-  try {
-    const payload = { name: habit.name }
+export const updateHabit = async habit => {
+  const payload = { name: habit.name }
 
-    const response = await fetch(`${back}/habits/${habit.id}`, {
-      method: 'PATCH',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
+  const response = await fetch(`${back}/habits/${habit.id}`, {
+    method: 'PATCH',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
 
+  if (!response.ok) {
     const data = await response.json()
-
-    return data
-  } catch (error) {
-    return Promise.reject(error)
+    throw data
   }
+
+  return response.json()
 }
 
-export const list = async () => {
-  console.log('LIST CALLED')
-  try {
-    const response = await fetch(`${back}/habits`, {
-      credentials: 'include',
-    })
-    const data = await response.json()
+export const listHabit = async () => {
+  const response = await fetch(`${back}/habits`, {
+    credentials: 'include',
+  })
 
-    return data
-  } catch (error) {
-    return Promise.reject(error)
+  if (!response.ok) {
+    const data = await response.json()
+    throw data
   }
+
+  return response.json()
 }
 
 export const deleteHabit = async id => {
-  try {
-    const response = await fetch(`${back}/habits/${id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    })
+  const response = await fetch(`${back}/habits/${id}`, {
+    method: 'DELETE',
+    credentials: 'include',
+  })
 
+  if (!response.ok) {
     const data = await response.json()
-
-    return data
-
-  } catch (error) {
-    return Promise.reject(error)
+    throw data
   }
+
+  return response.json()
 }

@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <button class="icon-button  icon-button--menu" @click="toggleMenu"></button>
+    <button class="icon-button icon-button--menu" @click="toggleMenu"></button>
 
     <slot />
   </header>
@@ -9,7 +9,7 @@
   <div v-if="isMenuOpen" class="overlay">
     <aside class="menu" @click.stop>
       <header class="menu-header">
-        <button class="icon-button  icon-button--menu" @click="closeMenu">
+        <button class="icon-button icon-button--menu" @click="closeMenu">
         </button>
       </header>
 

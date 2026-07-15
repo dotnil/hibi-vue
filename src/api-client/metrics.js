@@ -10,7 +10,12 @@ export const createMetric = async payload => {
     body: JSON.stringify(payload),
   })
 
-  return response
+  if (!response.ok) {
+    const data = await response.json()
+    throw data
+  }
+
+  return response.json()
 }
 
 export const listMetrics = async (start, end) => {
@@ -20,6 +25,11 @@ export const listMetrics = async (start, end) => {
       credentials: 'include',
     }
   )
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw data
+  }
 
   return response.json()
 }

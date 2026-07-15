@@ -18,15 +18,14 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { logout } from '../api-client/users'
-import { useRouter } from 'vue-router'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 import { getCurrentUser } from '../api-client/users'
-import { createHabit, list, updateHabit, deleteHabit } from '../api-client/habits.js'
+import { createHabit, listHabit, updateHabit, deleteHabit } from '../api-client/habits'
 
 import { listMetrics, createMetric } from '../api-client/metrics'
-import { getWeek, formatDate } from '../utils/week.js'
-import { makeHabitsWeek } from '../utils/habitsWeek.js'
+import { getWeek, formatDate } from '../utils/week'
+import { makeHabitsWeek } from '../utils/habitsWeek'
 
 import HabitForm from '../components/HabitForm.vue'
 import HabitList from '../components/HabitList.vue'
@@ -40,7 +39,7 @@ const route = useRoute()
 const router = useRouter()
 
 const loadHabits = async () => {
-  habits.value = await list()
+  habits.value = await listHabit()
 }
 
 const loadUser = async () => {
@@ -73,7 +72,7 @@ const onLogout = async () => {
     currentUser.value = null
     await router.push('/login')
   } catch (error) {
-    console.error(error)
+    console.error('logout failed:', error)
   }
 }
 
@@ -82,7 +81,7 @@ const onHabitCreated = async (habit) => {
     await createHabit(habit)
     await loadHabits()
   } catch (error) {
-    console.error('DB error:', error)
+    console.error('create habit failed:', error)
   }
 }
 
@@ -91,7 +90,7 @@ const onHabitUpdated = async (habit) => {
     await updateHabit(habit)
     await loadHabits()
   } catch (error) {
-    console.error('update failed:', error)
+    console.error('update habit failed:', error)
   }
 }
 
@@ -100,7 +99,7 @@ const onHabitDeleted = async (habit) => {
     await deleteHabit(habit.id)
     await loadHabits()
   } catch (error) {
-    console.error(error)
+    console.error('delete habit failed:', error)
   }
 }
 
@@ -118,7 +117,7 @@ const onDayClicked = async ({ habit, metricIndex, value }) => {
 
     await loadMetrics()
   } catch (error) {
-    console.error(error)
+    console.error('toggle metric failed:', error)
   }
 }
 
@@ -130,6 +129,3 @@ const habitsWeek = computed(() =>
   )
 )
 </script>
-
-<style scoped>
-</style>
