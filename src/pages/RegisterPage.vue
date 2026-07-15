@@ -15,8 +15,6 @@ const onRegister = async credentials => {
   try {
     const user = await createUser(credentials)
 
-    console.log('🐖 mr.Hryak registered')
-    console.log(user)
     await router.push('/login')
 
   } catch (error) {

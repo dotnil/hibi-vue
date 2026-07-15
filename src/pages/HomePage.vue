@@ -22,7 +22,7 @@ import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
 
 import { getCurrentUser } from '../api-client/users'
-import { createHabit, list, updateHabit, deleteHabit } from '../api-client/habits.js'
+import { createHabit, listHabit, updateHabit, deleteHabit } from '../api-client/habits.js'
 
 import { listMetrics, createMetric } from '../api-client/metrics'
 import { getWeek, formatDate } from '../utils/week.js'
@@ -40,7 +40,7 @@ const route = useRoute()
 const router = useRouter()
 
 const loadHabits = async () => {
-  habits.value = await list()
+  habits.value = await listHabit()
 }
 
 const loadUser = async () => {

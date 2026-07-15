@@ -10,7 +10,7 @@ export const createMetric = async payload => {
     body: JSON.stringify(payload),
   })
 
-  return response
+  return response.json()
 }
 
 export const listMetrics = async (start, end) => {
