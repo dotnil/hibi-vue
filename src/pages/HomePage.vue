@@ -1,13 +1,25 @@
 <template>
-  <Header
-    :currentUser="props.currentUser"
-    @logout="onLogout"
-  >
+<Header>
+
+  <template #actions>
     <HabitForm @habitCreated="onHabitCreated" />
-  </Header>
+  </template>
+
+
+  <template #menu>
+
+    <p>{{ props.currentUser.email }}</p>
+
+    <button @click="onLogout">
+      Logout
+    </button>
+
+  </template>
+
+</Header>
 
   <HabitList
-    :habits="habitsWeek"
+    :habitsWeek="habitsWeek"
     :days="week.days"
     @habitDeleted="onHabitDeleted"
     @habitUpdated="onHabitUpdated"

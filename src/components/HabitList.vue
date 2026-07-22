@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div v-for="habit in habits" :key="habit.id" class="habit-table__row">
+    <div v-for="habit in habitsWeek" :key="habit.id" class="habit-table__row">
 
       <div class="habit-row__days">
         <div class="habit-progress"></div>
@@ -79,7 +79,7 @@ import { ref, nextTick } from 'vue'
 
 const emit = defineEmits(['habitUpdated', 'habitDeleted', 'dayClicked'])
 const props = defineProps({
-  habits: Array,
+  habitsWeek: Array,
   days: Array
 })
 

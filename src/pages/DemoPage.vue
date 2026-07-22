@@ -1,10 +1,27 @@
 <template>
-  <Header>
+<Header>
+
+  <template #actions>
     <HabitForm @habitCreated="onHabitCreated" />
-  </Header>
+  </template>
+
+
+  <template #menu>
+
+    <RouterLink to="/login">
+      Login
+    </RouterLink>
+
+    <RouterLink to="/register">
+      Register
+    </RouterLink>
+
+  </template>
+
+</Header>
 
   <HabitList
-    :habits="habitsWeek"
+    :habitsWeek="habitsWeek"
     :days="week.days"
     @habitUpdated="onHabitUpdated"
     @habitDeleted="onHabitDeleted"
