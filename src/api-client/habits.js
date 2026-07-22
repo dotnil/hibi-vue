@@ -34,7 +34,7 @@ export const updateHabit = async habit => {
   return response.json()
 }
 
-export const listHabit = async () => {
+export const listHabits = async () => {
   const response = await fetch(`${back}/habits`, {
     credentials: 'include',
   })

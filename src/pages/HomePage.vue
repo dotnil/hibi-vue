@@ -1,6 +1,6 @@
 <template>
   <Header
-    :currentUser="currentUser"
+    :currentUser="props.currentUser"
     @logout="onLogout"
   >
     <HabitForm @habitCreated="onHabitCreated" />
@@ -16,12 +16,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { logout } from '../api-client/users'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
-import { getCurrentUser } from '../api-client/users'
-import { createHabit, listHabit, updateHabit, deleteHabit } from '../api-client/habits'
+import { createHabit, listHabits, updateHabit, deleteHabit } from '../api-client/habits'
 
 import { listMetrics, createMetric } from '../api-client/metrics'
 import { getWeek, formatDate } from '../utils/week'
@@ -32,18 +31,16 @@ import HabitList from '../components/HabitList.vue'
 import Header from '../components/Header.vue'
 
 const habits = ref([])
-const currentUser = ref(null)
 const metrics = ref([])
 
-const route = useRoute()
 const router = useRouter()
 
-const loadHabits = async () => {
-  habits.value = await listHabit()
-}
+const props = defineProps({
+  currentUser: Object,
+})
 
-const loadUser = async () => {
-  currentUser.value = await getCurrentUser()
+const loadHabits = async () => {
+  habits.value = await listHabits()
 }
 
 const loadMetrics = async () => {
@@ -56,20 +53,11 @@ const loadMetrics = async () => {
 onMounted(async () => {
   await loadMetrics()
   await loadHabits()
-  await loadUser()
 })
-
-watch(
-  () => route.fullPath,
-  async () => {
-    await loadUser()
-  }
-)
 
 const onLogout = async () => {
   try {
     await logout()
-    currentUser.value = null
     await router.push('/login')
   } catch (error) {
     console.error('logout failed:', error)
