@@ -6,7 +6,7 @@ export const formatDate = (date) => {
   return `${year}-${month}-${day}`
 }
 
-export const getWeek = (date) => {
+export const getLastDays = (date) => {
   const today = new Date(date)
   today.setHours(0, 0, 0, 0)
 
@@ -29,4 +29,26 @@ export const getWeek = (date) => {
     startDate: formatDate(start),
     endDate: formatDate(end),
   }
+}
+
+const isMetricSetForDateAndHabit = (metric, habitId, weekDate) => {
+  const metricDate = new Date(metric.date)
+
+  return (
+    metric.habit_id === habitId &&
+    metricDate.toDateString() === weekDate.toDateString()
+  )
+}
+
+export const makeHabitsDays = (habits, metrics, days) => {
+  return habits.map(habit => ({
+    ...habit,
+    metrics: days.map(day => {
+      const foundMetric = metrics.find(metric =>
+        isMetricSetForDateAndHabit(metric, habit.id, day)
+      )
+
+      return foundMetric ? foundMetric.value : false
+    })
+  }))
 }

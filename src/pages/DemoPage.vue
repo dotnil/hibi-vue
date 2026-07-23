@@ -21,8 +21,8 @@
 </Header>
 
   <HabitList
-    :habitsWeek="habitsWeek"
-    :days="week.days"
+    :habitsDays="habitsDays"
+    :days="period.days"
     @habitUpdated="onHabitUpdated"
     @habitDeleted="onHabitDeleted"
     @dayClicked="onDayClicked"
@@ -34,8 +34,7 @@
 import { ref, computed } from 'vue'
 
 import { demoHabits, demoMetrics } from '../demo'
-import { getWeek, formatDate } from '../utils/week'
-import { makeHabitsWeek } from '../utils/habitsWeek'
+import { getLastDays, formatDate, makeHabitsDays } from '../dates'
 
 import Header from '../components/Header.vue'
 import HabitForm from '../components/HabitForm.vue'
@@ -44,13 +43,13 @@ import HabitList from '../components/HabitList.vue'
 const habits = ref(structuredClone(demoHabits))
 const metrics = ref(structuredClone(demoMetrics))
 
-const week = computed(() => getWeek(new Date()))
+const period = computed(() => getLastDays(new Date()))
 
-const habitsWeek = computed(() =>
-  makeHabitsWeek(
+const habitsDays = computed(() =>
+  makeHabitsDays(
     habits.value,
     metrics.value,
-    week.value.days
+    period.value.days
   )
 )
 
@@ -78,7 +77,7 @@ const onHabitDeleted = habit => {
 }
 
 const onDayClicked = ({ habit, metricIndex, value }) => {
-  const date = formatDate(week.value.days[metricIndex])
+  const date = formatDate(period.value.days[metricIndex])
 
   const metric = metrics.value.find(item =>
     item.habit_id === habit.id &&
