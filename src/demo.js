@@ -1,6 +1,6 @@
-import { getWeek, formatDate } from './utils/week'
+import { getLastDays, formatDate } from './dates'
 
-const week = getWeek(new Date())
+const period = getLastDays(new Date())
 
 export const demoHabits = [
   {
@@ -25,83 +25,83 @@ export const demoMetrics = [
   // Drink water
   {
     habit_id: 1,
-    date: formatDate(week.days[0]),
+    date: formatDate(period.days[0]),
     value: true,
   },
   {
     habit_id: 1,
-    date: formatDate(week.days[1]),
+    date: formatDate(period.days[1]),
     value: true,
   },
   {
     habit_id: 1,
-    date: formatDate(week.days[2]),
+    date: formatDate(period.days[2]),
     value: true,
   },
   {
     habit_id: 1,
-    date: formatDate(week.days[4]),
+    date: formatDate(period.days[4]),
     value: true,
   },
   {
     habit_id: 1,
-    date: formatDate(week.days[6]),
+    date: formatDate(period.days[6]),
     value: true,
   },
 
   // Read 20 min
   {
     habit_id: 2,
-    date: formatDate(week.days[1]),
+    date: formatDate(period.days[1]),
     value: true,
   },
   {
     habit_id: 2,
-    date: formatDate(week.days[3]),
+    date: formatDate(period.days[3]),
     value: true,
   },
   {
     habit_id: 2,
-    date: formatDate(week.days[5]),
+    date: formatDate(period.days[5]),
     value: true,
   },
 
   // Walk 30 min
   {
     habit_id: 3,
-    date: formatDate(week.days[2]),
+    date: formatDate(period.days[2]),
     value: true,
   },
   {
     habit_id: 3,
-    date: formatDate(week.days[6]),
+    date: formatDate(period.days[6]),
     value: true,
   },
 
   // Meditate
   {
     habit_id: 4,
-    date: formatDate(week.days[0]),
+    date: formatDate(period.days[0]),
     value: true,
   },
   {
     habit_id: 4,
-    date: formatDate(week.days[1]),
+    date: formatDate(period.days[1]),
     value: true,
   },
   {
     habit_id: 4,
-    date: formatDate(week.days[2]),
+    date: formatDate(period.days[2]),
     value: true,
   },
   {
     habit_id: 4,
-    date: formatDate(week.days[3]),
+    date: formatDate(period.days[3]),
     value: true,
   },
   {
     habit_id: 4,
-    date: formatDate(week.days[4]),
+    date: formatDate(period.days[4]),
     value: true,
   },
 ]

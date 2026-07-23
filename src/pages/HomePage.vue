@@ -19,8 +19,8 @@
 </Header>
 
   <HabitList
-    :habitsWeek="habitsWeek"
-    :days="week.days"
+    :habitsDays="habitsDays"
+    :days="period.days"
     @habitDeleted="onHabitDeleted"
     @habitUpdated="onHabitUpdated"
     @dayClicked="onDayClicked"
@@ -35,8 +35,7 @@ import { useRouter } from 'vue-router'
 import { createHabit, listHabits, updateHabit, deleteHabit } from '../api-client/habits'
 
 import { listMetrics, createMetric } from '../api-client/metrics'
-import { getWeek, formatDate } from '../utils/week'
-import { makeHabitsWeek } from '../utils/habitsWeek'
+import { getLastDays, formatDate, makeHabitsDays } from '../dates'
 
 import HabitForm from '../components/HabitForm.vue'
 import HabitList from '../components/HabitList.vue'
@@ -57,8 +56,8 @@ const loadHabits = async () => {
 
 const loadMetrics = async () => {
   metrics.value = await listMetrics(
-    week.value.startDate,
-    week.value.endDate
+    period.value.startDate,
+    period.value.endDate
   )
 }
 
@@ -103,10 +102,10 @@ const onHabitDeleted = async (habit) => {
   }
 }
 
-const week = computed(() => getWeek(new Date()))
+const period = computed(() => getLastDays(new Date()))
 
 const onDayClicked = async ({ habit, metricIndex, value }) => {
-  const date = week.value.days[metricIndex]
+  const date = period.value.days[metricIndex]
 
   try {
     await createMetric({
@@ -121,11 +120,11 @@ const onDayClicked = async ({ habit, metricIndex, value }) => {
   }
 }
 
-const habitsWeek = computed(() =>
-  makeHabitsWeek(
+const habitsDays = computed(() =>
+  makeHabitsDays(
     habits.value,
     metrics.value,
-    week.value.days
+    period.value.days
   )
 )
 </script>
