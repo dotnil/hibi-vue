@@ -1,7 +1,19 @@
 <template>
-  <div v-if="isLoading">
-    Loading...🐗
-  </div>
+  <div v-if="isLoading" class="skeleton">
+
+    <div class="skeleton__header"></div>
+
+    <div class="skeleton__row" v-for="n in 5" :key="n">
+      <div class="skeleton__habit"></div>
+
+      <div
+        v-for="day in 7"
+        :key="day"
+        class="skeleton__day"
+        />
+      </div>
+
+    </div>
 
   <DemoPage v-else-if="!currentUser" />
 
@@ -32,3 +44,40 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+.skeleton {
+  margin: 0 20px;
+}
+
+.skeleton__header {
+  height: 132px;
+
+  margin-bottom: 20px;
+  box-shadow: 0 1px 0 #e5e7eb;
+}
+
+.skeleton__row {
+  display: grid;
+  grid-template-columns:
+    minmax(120px, 2fr)
+    repeat(7, 0.5fr);
+
+  gap: 8px;
+
+  height: 112px;
+  padding: 20px 14px;
+  margin: 20px 0;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+.skeleton__habit,
+.skeleton__day {
+  height: 32px;
+
+  border-radius: 8px;
+  background: #f3f4f6;
+}
+</style>
