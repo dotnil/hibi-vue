@@ -7,30 +7,26 @@ export const formatDate = (date) => {
 }
 
 export const getWeek = (date) => {
-  const now = new Date(date)
+  const today = new Date(date)
+  today.setHours(0, 0, 0, 0)
 
-  const dayOfWeek = now.getDay()
-  const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+  const start = new Date(today)
+  start.setDate(today.getDate() - 6)
 
-  const weekStart = new Date(now)
-  weekStart.setDate(now.getDate() + offset)
-  weekStart.setHours(0, 0, 0, 0)
+  const end = new Date(today)
+  end.setDate(today.getDate() + 1)
 
   const days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(weekStart)
-    d.setDate(weekStart.getDate() + i)
-    return d
+    const day = new Date(start)
+    day.setDate(start.getDate() + i)
+
+    return day
   })
 
-  const startDate = formatDate(weekStart)
-
-  const endDate = new Date(weekStart)
-  endDate.setDate(endDate.getDate() + 7)
-
   return {
-    weekStart,
+    weekStart: start,
     days,
-    startDate,
-    endDate: formatDate(endDate),
+    startDate: formatDate(start),
+    endDate: formatDate(end),
   }
 }
