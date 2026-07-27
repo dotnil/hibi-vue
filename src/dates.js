@@ -52,3 +52,54 @@ export const makeHabitsDays = (habits, metrics, days) => {
     })
   }))
 }
+
+export const getCalendarPeriod = (period, date = new Date()) => {
+  const current = new Date(date)
+  current.setHours(0, 0, 0, 0)
+
+  if (period === 'day') {
+    const end = new Date(current)
+    end.setDate(current.getDate() + 1)
+
+    return {
+      startDate: formatDate(current),
+      endDate: formatDate(end),
+    }
+  }
+
+  if (period === 'week') {
+    const day = current.getDay()
+
+    const diff = day === 0 ? -6 : 1 - day
+
+    const start = new Date(current)
+    start.setDate(current.getDate() + diff)
+
+    const end = new Date(start)
+    end.setDate(start.getDate() + 7)
+
+    return {
+      startDate: formatDate(start),
+      endDate: formatDate(end),
+    }
+  }
+
+  if (period === 'month') {
+    const start = new Date(
+      current.getFullYear(),
+      current.getMonth(),
+      1
+    )
+
+    const end = new Date(
+      current.getFullYear(),
+      current.getMonth() + 1,
+      1
+    )
+
+    return {
+      startDate: formatDate(start),
+      endDate: formatDate(end),
+    }
+  }
+}

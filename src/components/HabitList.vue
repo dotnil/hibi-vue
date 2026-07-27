@@ -51,6 +51,10 @@
               class="edit-input"
               />
 
+              <div class="habit-goal">
+                {{ habit.goal_target }} / {{ habit.goal_period }}
+              </div>
+
               <div class="habit-actions">
                 <button
                   v-if="editingId !== habit.id"
