@@ -35,7 +35,7 @@ import { useRouter } from 'vue-router'
 import { createHabit, listHabits, updateHabit, deleteHabit } from '../api-client/habits'
 
 import { listMetrics, createMetric } from '../api-client/metrics'
-import { getLastDays, formatDate, makeHabitsDays, getCalendarPeriod } from '../dates'
+import { getLastDays, formatDate, makeHabitsDays, getCalendarPeriod, calculateProgress } from '../dates'
 
 import HabitForm from '../components/HabitForm.vue'
 import HabitList from '../components/HabitList.vue'
@@ -64,6 +64,14 @@ const loadMetrics = async () => {
 onMounted(async () => {
   await loadMetrics()
   await loadHabits()
+
+  console.log(
+    calculateProgress(
+      habits.value[0],
+      metrics.value,
+      getCalendarPeriod('week')
+    )
+  )
 })
 
 const onLogout = async () => {
@@ -128,7 +136,5 @@ const habitsDays = computed(() =>
   )
 )
 
-console.log(
-  getCalendarPeriod('week')
-)
+
 </script>

@@ -16,7 +16,9 @@
     <div v-for="habit in habitsDays" :key="habit.id" class="habit-table__row">
 
       <div class="habit-row__days">
-        <div class="habit-progress"></div>
+        <div class="habit-progress">
+          {{ habit.progress }}%
+        </div>
 
         <div
           class="habit-day"
@@ -54,7 +56,7 @@
               <div class="habit-goal">
                 {{ habit.goal_target }} / {{ habit.goal_period }}
               </div>
-
+<pre>{{ habit }}</pre>
               <div class="habit-actions">
                 <button
                   v-if="editingId !== habit.id"

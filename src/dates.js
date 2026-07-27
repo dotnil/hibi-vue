@@ -43,13 +43,20 @@ const isMetricSetForDateAndHabit = (metric, habitId, weekDate) => {
 export const makeHabitsDays = (habits, metrics, days) => {
   return habits.map(habit => ({
     ...habit,
+
     metrics: days.map(day => {
       const foundMetric = metrics.find(metric =>
         isMetricSetForDateAndHabit(metric, habit.id, day)
       )
 
       return foundMetric ? foundMetric.value : false
-    })
+    }),
+
+    progress: calculateProgress(
+      habit,
+      metrics,
+      getCalendarPeriod(habit.goal_period)
+    )
   }))
 }
 
@@ -102,4 +109,24 @@ export const getCalendarPeriod = (period, date = new Date()) => {
       endDate: formatDate(end),
     }
   }
+}
+
+export const calculateProgress = (habit, metrics, period) => {
+  const target = Number(habit.goal_target)
+
+  const completed = metrics.filter(metric =>
+    metric.habit_id === habit.id &&
+    metric.value === true &&
+    metric.date >= period.startDate &&
+    metric.date < period.endDate
+  ).length
+
+  if (!target) {
+    return 0
+  }
+
+  return Math.min(
+    Math.round((completed / target) * 100),
+    100
+  )
 }
