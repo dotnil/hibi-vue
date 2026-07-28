@@ -1,3 +1,5 @@
+export const DEFAULT_VISIBLE_DAYS = 7
+
 export const formatDate = (date) => {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -6,17 +8,17 @@ export const formatDate = (date) => {
   return `${year}-${month}-${day}`
 }
 
-export const getLastDays = (date) => {
+export const getLastDays = (date, visibleDays = DEFAULT_VISIBLE_DAYS) => {
   const today = new Date(date)
   today.setHours(0, 0, 0, 0)
 
   const start = new Date(today)
-  start.setDate(today.getDate() - 6)
+  start.setDate(today.getDate() - (visibleDays - 1))
 
   const end = new Date(today)
   end.setDate(today.getDate() + 1)
 
-  const days = Array.from({ length: 7 }, (_, i) => {
+  const days = Array.from({ length: visibleDays }, (_, i) => {
     const day = new Date(start)
     day.setDate(start.getDate() + i)
 

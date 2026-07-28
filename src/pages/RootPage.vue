@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoading" class="skeleton">
+  <div v-if="isLoading" class="skeleton" :style="{ '--days-count': DEFAULT_VISIBLE_DAYS }">
 
     <div class="skeleton__header"></div>
 
@@ -7,7 +7,7 @@
       <div class="skeleton__habit"></div>
 
       <div
-        v-for="day in 7"
+        v-for="day in visibleDays"
         :key="day"
         class="skeleton__day"
         />
@@ -15,11 +15,12 @@
 
     </div>
 
-  <DemoPage v-else-if="!currentUser" />
+  <DemoPage v-else-if="!currentUser" :visibleDays="visibleDays"/>
 
   <HomePage
     v-else
     :currentUser="currentUser"
+    :visibleDays="visibleDays"
   />
 </template>
 
@@ -27,6 +28,8 @@
 import { ref, onMounted } from 'vue'
 
 import { getCurrentUser } from '../api-client/users'
+import { DEFAULT_VISIBLE_DAYS } from '../dates'
+import { useVisibleDays } from '../viewport'
 
 import DemoPage from './DemoPage.vue'
 import HomePage from './HomePage.vue'
@@ -43,6 +46,8 @@ onMounted(async () => {
     isLoading.value = false
   }
 })
+
+const visibleDays = useVisibleDays()
 </script>
 
 <style scoped>
@@ -61,7 +66,7 @@ onMounted(async () => {
   display: grid;
   grid-template-columns:
     minmax(120px, 2fr)
-    repeat(7, 0.5fr);
+    repeat(var(--days-count), 0.5fr);
 
   gap: 8px;
 

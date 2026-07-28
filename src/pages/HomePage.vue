@@ -21,6 +21,7 @@
   <HabitList
     :habitsDays="habitsDays"
     :days="period.days"
+    :visibleDays="period.days.length"
     @habitDeleted="onHabitDeleted"
     @habitUpdated="onHabitUpdated"
     @dayClicked="onDayClicked"
@@ -48,6 +49,7 @@ const router = useRouter()
 
 const props = defineProps({
   currentUser: Object,
+  visibleDays: Number,
 })
 
 const loadHabits = async () => {
@@ -64,14 +66,6 @@ const loadMetrics = async () => {
 onMounted(async () => {
   await loadMetrics()
   await loadHabits()
-
-  console.log(
-    calculateProgress(
-      habits.value[0],
-      metrics.value,
-      getCalendarPeriod('week')
-    )
-  )
 })
 
 const onLogout = async () => {
@@ -110,7 +104,7 @@ const onHabitDeleted = async (habit) => {
   }
 }
 
-const period = computed(() => getLastDays(new Date()))
+const period = computed(() => getLastDays(new Date(), props.visibleDays))
 
 const onDayClicked = async ({ habit, metricIndex, value }) => {
   const date = period.value.days[metricIndex]

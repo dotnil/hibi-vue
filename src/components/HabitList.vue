@@ -1,5 +1,5 @@
 <template>
-  <div class="habit-table">
+  <div class="habit-table" :style="{ '--days-count': visibleDays }">
     <div class="habit-table__header">
       <div class="habit-name"></div>
       <div
@@ -17,7 +17,11 @@
 
       <div class="habit-row__days">
         <div class="habit-progress">
-          {{ habit.progress }}%
+          <div class="progress-circle"></div>
+
+          <div class="progress-value">
+            {{ habit.progress }}%
+          </div>
         </div>
 
         <div
@@ -56,7 +60,7 @@
               <div class="habit-goal">
                 {{ habit.goal_target }} / {{ habit.goal_period }}
               </div>
-<pre>{{ habit }}</pre>
+
               <div class="habit-actions">
                 <button
                   v-if="editingId !== habit.id"
@@ -86,7 +90,8 @@ import { ref, nextTick } from 'vue'
 const emit = defineEmits(['habitUpdated', 'habitDeleted', 'dayClicked'])
 const props = defineProps({
   habitsDays: Array,
-  days: Array
+  days: Array,
+  visibleDays: Number
 })
 
 const editingId = ref(null)
@@ -157,7 +162,7 @@ const onDayClick = (habit, index) => {
 
   --habit-columns:
     minmax(120px, 2fr)
-    repeat(7, 0.5fr);
+    repeat(var(--days-count), 0.5fr);
 }
 
 .habit-table__header {
@@ -203,7 +208,7 @@ const onDayClick = (habit, index) => {
 
 .habit-table__row {
   margin: 20px 0;
-  padding: 20px 14px;
+  padding: 20px 16px;
 
   border: 1px solid #e5e7eb;
   border-radius: 14px;
@@ -226,9 +231,17 @@ const onDayClick = (habit, index) => {
 }
 
 .habit-progress {
+  position: relative;
+
   display: flex;
-  justify-content: center;
   align-items: center;
+
+  overflow: hidden;
+}
+
+.progress-value {
+  position: relative;
+  z-index: 1;
 }
 
 .habit-row__info {
@@ -250,7 +263,6 @@ const onDayClick = (habit, index) => {
 
 .habit-name-text {
   cursor: pointer;
-  padding: 4px 8px;
   border-radius: 6px;
 }
 
