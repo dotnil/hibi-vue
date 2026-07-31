@@ -13,10 +13,13 @@
       </div>
     </div>
 
-    <div v-for="habit in habitsDays" :key="habit.id" class="habit-table__row">
+    <div v-for="habit in habitsDays" :key="habit.id" class="habit-table__row" ref="rowRefs">
 
       <div class="habit-row__days">
-        <div class="habit-progress">
+        <div 
+          class="habit-progress"
+          :style="{ '--progress': habit.progress }"
+          >
           <div class="progress-circle"></div>
 
           <div class="progress-value">
@@ -85,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted, watch } from 'vue'
 
 const emit = defineEmits(['habitUpdated', 'habitDeleted', 'dayClicked'])
 const props = defineProps({
@@ -97,6 +100,7 @@ const props = defineProps({
 const editingId = ref(null)
 const editingName = ref('')
 const inputRef = ref(null)
+const rowRefs = ref([])
 
 const startEdit = (habit) => {
   editingId.value = habit.id
@@ -154,6 +158,38 @@ const onDayClick = (habit, index) => {
     value: !habit.metrics[index]
   })
 }
+
+const observer = new ResizeObserver(entries => {
+  for (const entry of entries) {
+    entry.target.style.setProperty(
+      '--card-size',
+      `${entry.contentRect.width}px`
+    )
+  }
+})
+
+
+const observedRows = new Set()
+
+watch(
+  rowRefs,
+  rows => {
+    rows.forEach(row => {
+      if (!observedRows.has(row)) {
+        observer.observe(row)
+        observedRows.add(row)
+      }
+    })
+  },
+  {
+    flush: 'post',
+    deep: true
+  }
+)
+
+onUnmounted(() => {
+  observer.disconnect()
+})
 </script>
 
 <style scoped>
@@ -214,6 +250,8 @@ const onDayClick = (habit, index) => {
   border-radius: 14px;
 
   transition: box-shadow .2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .habit-table__row:hover {
@@ -232,13 +270,28 @@ const onDayClick = (habit, index) => {
 
 .habit-progress {
   position: relative;
-
+  min-height: 32px;
+  width: min-content;
   display: flex;
   align-items: center;
-
-  overflow: hidden;
 }
+.progress-circle {
+  position: absolute;
 
+  width: calc(36px + (var(--card-size) * 2 - 36px) * var(--progress) / 100);
+  height: calc(36px + (var(--card-size) * 2 - 36px) * var(--progress) / 100);
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .08);
+
+  pointer-events: none;
+  z-index: 0;
+}
 .progress-value {
   position: relative;
   z-index: 1;
