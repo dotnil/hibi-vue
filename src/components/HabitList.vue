@@ -266,6 +266,8 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   min-height: 32px;
+  position: relative;
+  z-index: 1;
 }
 
 .habit-progress {
@@ -287,14 +289,13 @@ onUnmounted(() => {
   transform: translate(-50%, -50%);
 
   border-radius: 50%;
-  background: rgba(0, 0, 0, .08);
+  background: #ddea7c;
 
   pointer-events: none;
   z-index: 0;
 }
 .progress-value {
   position: relative;
-  z-index: 1;
 }
 
 .habit-row__info {
@@ -303,6 +304,8 @@ onUnmounted(() => {
   justify-content: space-between;
 
   margin-top: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .habit-name {
@@ -359,6 +362,9 @@ onUnmounted(() => {
   cursor: pointer;
   transition: transform 0.22s ease;
   transform-origin: center center;
+
+  position: relative;
+  z-index: 1;
 }
 
 .icon-button {
