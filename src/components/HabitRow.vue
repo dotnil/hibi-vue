@@ -10,7 +10,7 @@
         v-for="(metric, index) in habit.metrics"
         :key="index"
         class="habit-day"
-        @click="onDayClick(habit, index)"
+        @click="onDayClick(index)"
       >
         <div class="metric" :class="{ 'metric--done': metric }"></div>
       </div>
@@ -18,15 +18,20 @@
 
     <div class="habit-row__info">
       <div class="habit-name">
-        <span v-if="editingId !== habit.id" class="habit-name-text" @click="startEdit(habit)">
+        <span 
+          v-if="!isEditing"
+          class="habit-name-text"
+          @click="startEdit(habit)"
+          >
           {{ habit.name }}
         </span>
         <input
-          v-else
-          v-model="editingName"
-          class="edit-input"
-          @keydown.enter.prevent="save"
-          @keydown.esc.prevent="cancelEdit"
+        v-else
+        ref="inputRef"
+        v-model="editingName"
+        class="edit-input"
+        @keydown.enter.prevent="save"
+        @keydown.esc.prevent="cancelEdit"
         />
 
         <div class="habit-goal">
@@ -34,7 +39,11 @@
         </div>
 
         <div class="habit-actions">
-          <button v-if="editingId !== habit.id" class="icon-button icon-button--edit" @click="startEdit(habit)"></button>
+          <button 
+            v-if="!isEditing"
+            class="icon-button icon-button--edit"
+            @click="startEdit(habit)"
+            ></button>
           <button v-else class="icon-button icon-button--done" @click="save"></button>
           <button class="icon-button icon-button--delete" @click="emit('habitDeleted', habit)"></button>
         </div>
@@ -57,41 +66,32 @@ const { habit } = defineProps({
   habit: Object
 })
 
-const editingId = ref(null)
+const isEditing = ref(false)
 const editingName = ref('')
 
+const inputRef = ref(null)
+
 const startEdit = (habit) => {
-  editingId.value = habit.id
+  isEditing.value = true
   editingName.value = habit.name
 
   nextTick(() => {
     setTimeout(() => {
-      const input = document.querySelector('.edit-input')
-
-      if (input) {
-        input.focus()
-        input.select()
-      }
+      inputRef.value?.focus()
+      inputRef.value?.select()
     }, 50)
   })
 }
 
 const cancelEdit = () => {
-  editingId.value = null
+  isEditing.value = false
   editingName.value = ''
 }
 
 const save = () => {
   const name = editingName.value.trim()
 
-console.log('SAVE', {
-  id: habit.id,
-  name,
-  goalPeriod: habit.goal_period,
-  goalTarget: habit.goal_target
-})
-
-  if (name && editingId.value) {
+  if (name) {
     emit('habitUpdated', {
       id: habit.id,
       name,
@@ -100,18 +100,17 @@ console.log('SAVE', {
     })
   }
 
-  editingId.value = null
+  isEditing.value = false
   editingName.value = ''
 }
 
-const onDayClick = (habit, index) => {
+const onDayClick = (index) => {
   emit('dayClicked', {
     habit,
     metricIndex: index,
     value: !habit.metrics[index]
   })
 }
-
 
 const rowRef = ref(null)
 
@@ -124,11 +123,9 @@ const observer = new ResizeObserver(entries => {
   }
 })
 
-
 onMounted(() => {
   observer.observe(rowRef.value)
 })
-
 
 onUnmounted(() => {
   observer.disconnect()

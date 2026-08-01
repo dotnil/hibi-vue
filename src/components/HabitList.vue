@@ -13,9 +13,10 @@
       </div>
     </div>
     <HabitRow
-    v-for="habit in habitsDays"
-    :key="habit.id"
-    :habit="habit"
+  v-for="habit in habitsDays"
+  :key="habit.id"
+  :habit="habit"
+  :visible-days="visibleDays"
     @habit-updated="emit('habitUpdated', $event)"
     @habit-deleted="emit('habitDeleted', $event)"
     @day-clicked="emit('dayClicked', $event)"
@@ -26,15 +27,13 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
 import HabitRow from './HabitRow.vue'
 
-
-const emit = defineEmits([
-  'habitUpdated',
-  'habitDeleted',
-  'dayClicked'
-])
+const emit = defineEmits({
+  habitUpdated: null,
+  habitDeleted: null,
+  dayClicked: null
+})
 
 const props = defineProps({
   habitsDays: Array,

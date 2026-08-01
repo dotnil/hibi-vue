@@ -36,7 +36,7 @@ import { useRouter } from 'vue-router'
 import { createHabit, listHabits, updateHabit, deleteHabit } from '../api-client/habits'
 
 import { listMetrics, createMetric } from '../api-client/metrics'
-import { getLastDays, formatDate, makeHabitsDays, getCalendarPeriod, calculateProgress } from '../dates'
+import { getLastDays, formatDate, makeHabitsDays } from '../dates'
 
 import HabitForm from '../components/HabitForm.vue'
 import HabitList from '../components/HabitList.vue'
