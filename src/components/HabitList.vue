@@ -13,16 +13,13 @@
       </div>
     </div>
     <HabitRow
-  v-for="habit in habitsDays"
-  :key="habit.id"
-  :habit="habit"
-  :visible-days="visibleDays"
-    @habit-updated="emit('habitUpdated', $event)"
-    @habit-deleted="emit('habitDeleted', $event)"
-    @day-clicked="emit('dayClicked', $event)"
+      v-for="habit in habitsDays"
+      :key="habit.id"
+      :habit="habit"
+      @habit-updated="emit('habitUpdated', $event)"
+      @habit-deleted="emit('habitDeleted', $event)"
+      @day-clicked="emit('dayClicked', $event)"
     />
-
-
   </div>
 </template>
 
@@ -35,7 +32,7 @@ const emit = defineEmits({
   dayClicked: null
 })
 
-const props = defineProps({
+defineProps({
   habitsDays: Array,
   days: Array,
   visibleDays: Number

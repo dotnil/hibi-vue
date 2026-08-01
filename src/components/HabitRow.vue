@@ -21,7 +21,7 @@
         <span 
           v-if="!isEditing"
           class="habit-name-text"
-          @click="startEdit(habit)"
+          @click="startEdit"
           >
           {{ habit.name }}
         </span>
@@ -32,17 +32,18 @@
         class="edit-input"
         @keydown.enter.prevent="save"
         @keydown.esc.prevent="cancelEdit"
+        @blur="save"
         />
 
         <div class="habit-goal">
-          {{ habit.goal_target }} / {{ habit.goal_period }}
+          {{ habit.goal_target }}/{{ habit.goal_period }}
         </div>
 
         <div class="habit-actions">
           <button 
             v-if="!isEditing"
             class="icon-button icon-button--edit"
-            @click="startEdit(habit)"
+            @click="startEdit"
             ></button>
           <button v-else class="icon-button icon-button--done" @click="save"></button>
           <button class="icon-button icon-button--delete" @click="emit('habitDeleted', habit)"></button>
@@ -51,7 +52,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref, nextTick, onMounted, onUnmounted } from 'vue'
@@ -71,7 +71,7 @@ const editingName = ref('')
 
 const inputRef = ref(null)
 
-const startEdit = (habit) => {
+const startEdit = () => {
   isEditing.value = true
   editingName.value = habit.name
 
@@ -95,8 +95,8 @@ const save = () => {
     emit('habitUpdated', {
       id: habit.id,
       name,
-      goalPeriod: habit.goal_period,
-      goalTarget: habit.goal_target
+      goal_period: habit.goal_period,
+      goal_target: habit.goal_target
     })
   }
 
@@ -133,7 +133,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-
 .habit-table__row {
   margin: 20px 0;
   padding: 20px 16px;
@@ -205,15 +204,33 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
 
+  min-width:0;
   flex: 1;
   gap: 12px;
+}
+
+.habit-goal {
+  flex-shrink:0;
+  white-space:nowrap;
+  font-size: 0.8rem;
+  color: #6b7280;
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+
+.habit-table__row:hover .habit-goal {
+  opacity: .7;
 }
 
 .habit-name-text {
   cursor: pointer;
   border-radius: 6px;
 }
-
+.habit-name-text {
+  display: block;
+  height: 24px;
+  line-height: 24px;
+}
 .habit-name-text:hover {
   background: #f5f5f5;
 }
@@ -222,6 +239,7 @@ onUnmounted(() => {
   display: flex;
   gap: 8px;
 
+  flex-shrink:0;
   opacity: 0;
   transition: opacity .15s ease;
 }
@@ -232,18 +250,19 @@ onUnmounted(() => {
 
 .edit-input {
   width: 100%;
+  height: 24px;
 
   margin: 0;
+  padding: 0 8px;
 
   border: 0;
   outline: none;
   background: transparent;
 
-  padding: 4px 8px;
   font: inherit;
+  line-height: 24px;
+
   color: inherit;
-  line-height: inherit;
-  height: 20px;
   box-sizing: border-box;
 }
 
@@ -305,5 +324,4 @@ onUnmounted(() => {
 .metric:hover {
   transform: scale(1.12);
 }
-
 </style>

@@ -10,7 +10,7 @@
 
     <p>{{ props.currentUser.email }}</p>
 
-    <button @click="onLogout">
+    <button class="logout-button" @click="onLogout">
       Logout
     </button>
 
@@ -132,3 +132,10 @@ const habitsDays = computed(() =>
 
 
 </script>
+
+
+<style scoped>
+.logout-button {
+border: 1px solid #e5e7eb;
+}
+</style>

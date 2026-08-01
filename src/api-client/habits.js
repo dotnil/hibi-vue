@@ -19,8 +19,8 @@ export const createHabit = async habit => {
 export const updateHabit = async habit => {
   const payload = {
     name: habit.name,
-    goalPeriod: habit.goalPeriod,
-    goalTarget: habit.goalTarget
+    goalPeriod: habit.goal_period,
+    goalTarget: habit.goal_target
   }
 
   const response = await fetch(`${back}/habits/${habit.id}`, {
