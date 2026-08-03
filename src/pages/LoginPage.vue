@@ -24,3 +24,9 @@ const onLogin = async credentials => {
   }
 }
 </script>
+
+<style scoped>
+h2 {
+  margin: 20px;
+}
+</style>
