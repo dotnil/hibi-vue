@@ -23,6 +23,7 @@
   <HabitList
     :habitsDays="habitsDays"
     :days="period.days"
+    :visibleDays="period.days.length"
     @habitUpdated="onHabitUpdated"
     @habitDeleted="onHabitDeleted"
     @dayClicked="onDayClicked"
