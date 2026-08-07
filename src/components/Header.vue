@@ -37,19 +37,15 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
-
 const isMenuOpen = ref(false)
-
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
-
 const closeMenu = () => {
   isMenuOpen.value = false
 }
-
 
 const onKeyDown = (event) => {
   if (event.key === 'Escape') {
@@ -57,11 +53,9 @@ const onKeyDown = (event) => {
   }
 }
 
-
 onMounted(() => {
   window.addEventListener('keydown', onKeyDown)
 })
-
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeyDown)

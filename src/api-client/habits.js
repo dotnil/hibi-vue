@@ -17,7 +17,11 @@ export const createHabit = async habit => {
 }
 
 export const updateHabit = async habit => {
-  const payload = { name: habit.name }
+  const payload = {
+    name: habit.name,
+    goalPeriod: habit.goal_period,
+    goalTarget: habit.goal_target
+  }
 
   const response = await fetch(`${back}/habits/${habit.id}`, {
     method: 'PATCH',

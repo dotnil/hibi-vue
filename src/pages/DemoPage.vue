@@ -23,6 +23,7 @@
   <HabitList
     :habitsDays="habitsDays"
     :days="period.days"
+    :visibleDays="period.days.length"
     @habitUpdated="onHabitUpdated"
     @habitDeleted="onHabitDeleted"
     @dayClicked="onDayClicked"
@@ -42,8 +43,11 @@ import HabitList from '../components/HabitList.vue'
 
 const habits = ref(structuredClone(demoHabits))
 const metrics = ref(structuredClone(demoMetrics))
+const props = defineProps({
+  visibleDays: Number,
+})
 
-const period = computed(() => getLastDays(new Date()))
+const period = computed(() => getLastDays(new Date(), props.visibleDays))
 
 const habitsDays = computed(() =>
   makeHabitsDays(

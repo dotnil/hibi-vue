@@ -46,4 +46,28 @@ button:hover {
   opacity: 0.9;
   background: #ddea7c;
 }
+
+input {
+  flex: 1;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  font-size: 16px;
+
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ddea7c;
+  box-shadow: 0 0 0 3px rgba(221, 234, 124, 0.25);
+}
+
+input:hover {
+  outline: none;
+  border-color: #ddea7c;
+  box-shadow: 0 0 0 3px rgba(221, 234, 124, 0.25);
+}
 </style>

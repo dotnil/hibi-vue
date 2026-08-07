@@ -10,6 +10,17 @@
       placeholder="habit name"
       @keydown.esc="closeForm"
     >
+    <input
+    v-model.number="goalTarget"
+    type="number"
+    min="1"
+    />
+
+    <select v-model="goalPeriod">
+      <option value="day">day</option>
+      <option value="week">week</option>
+      <option value="month">month</option>
+    </select>
 
     <button class="icon-button icon-button--done" type="submit">
     </button>
@@ -27,6 +38,9 @@ const inputRef = ref(null)
 const emit = defineEmits(['habitCreated'])
 
 const name = ref('')
+const goalPeriod = ref('day')
+const goalTarget = ref(1)
+
 const isFormOpen = ref(false)
 
 const open = async () => {
@@ -40,7 +54,9 @@ const open = async () => {
 const handleSubmit = () => {
   const habit = {
     name: name.value,
-    active: true
+    active: true,
+    goalPeriod: goalPeriod.value,
+    goalTarget: goalTarget.value,
   }
 
   emit('habitCreated', habit)
@@ -49,6 +65,8 @@ const handleSubmit = () => {
 
 const closeForm = () => {
   name.value = ''
+  goalPeriod.value = 'day'
+  goalTarget.value = 1
   isFormOpen.value = false
 }
 </script>
