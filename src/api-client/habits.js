@@ -19,6 +19,7 @@ export const createHabit = async habit => {
 export const updateHabit = async habit => {
   const payload = {
     name: habit.name,
+    color: habit.color,
     goalPeriod: habit.goal_period,
     goalTarget: habit.goal_target
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="habit-table__row" ref="rowRef">
     <div class="habit-row__days">
-      <div class="habit-progress" :style="{ '--progress': habit.progress }">
+      <div class="habit-progress" :style="{ '--progress': habit.progress, '--habit-color': habit.color }">
         <div class="progress-circle"></div>
         <div class="progress-value">{{ habit.progress }}%</div>
       </div>
@@ -95,6 +95,7 @@ const save = () => {
     emit('habitUpdated', {
       id: habit.id,
       name,
+      color: habit.color,
       goal_period: habit.goal_period,
       goal_target: habit.goal_target
     })
@@ -180,7 +181,7 @@ onUnmounted(() => {
   transform: translate(-50%, -50%);
 
   border-radius: 50%;
-  background: #ddea7c;
+  background: var(--habit-color);
 
   pointer-events: none;
   z-index: 0;
