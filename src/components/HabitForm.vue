@@ -1,75 +1,147 @@
 <template>
 <div class="toolbar">
-  <button class="icon-button icon-button--add" v-if="!isFormOpen" @click="open"></button>
+  <button class="icon-button icon-button--add" @click="open"></button>
 
-  <form v-else @submit.prevent="handleSubmit">
-    <input
-      v-model="name"
-      ref="inputRef"
-      type="text"
-      placeholder="habit name"
-      @keydown.esc="closeForm"
-    >
-    <input
-    v-model.number="goalTarget"
-    type="number"
-    min="1"
-    />
+  <dialog ref="dialogRef" @close="onDialogClose">
+    <form @submit.prevent="handleSubmit">
+      <input
+        v-model="name"
+        ref="inputRef"
+        type="text"
+        placeholder="habit name"
+        required
+      >
+      <input
+        v-model.number="goalTarget"
+        type="number"
+        min="1"
+        :max="goalMaximums[goalPeriod]"
+        @focus="selectGoalTarget"
+      />
 
-    <select v-model="goalPeriod">
-      <option value="day">day</option>
-      <option value="week">week</option>
-      <option value="month">month</option>
-    </select>
+      <select v-model="goalPeriod">
+        <option value="day">day</option>
+        <option value="week">week</option>
+        <option value="month">month</option>
+      </select>
 
-    <button class="icon-button icon-button--done" type="submit">
-    </button>
+      <div class="color-picker" aria-label="Habit color">
+        <button
+          v-for="color in habitColors"
+          :key="color"
+          class="color-option"
+          :class="{ 'color-option--selected': selectedColor === color }"
+          :style="{ backgroundColor: color }"
+          :aria-label="color"
+          type="button"
+          @click="selectedColor = color"
+        ></button>
+      </div>
 
-    <button class="icon-button icon-button--close" type="button" @click="closeForm">
-    </button>
-  </form>
+      <button class="icon-button icon-button--done" type="submit">
+      </button>
+
+      <button class="icon-button icon-button--close" type="button" @click="close">
+      </button>
+    </form>
+  </dialog>
 </div>
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue'
-import { getRandomHabitColor } from '../habit-colors'
+import { ref, nextTick, watch } from 'vue'
+import { habitColors, getRandomHabitColor } from '../habit-colors'
 
 const inputRef = ref(null)
-const emit = defineEmits(['habitCreated'])
+const dialogRef = ref(null)
+const emit = defineEmits(['habitCreated', 'habitUpdated', 'formClosed'])
+const props = defineProps({
+  habit: Object,
+})
+
+const goalMaximums = {
+  day: 1,
+  week: 7,
+  month: 28,
+}
 
 const name = ref('')
-const goalPeriod = ref('day')
-const goalTarget = ref(1)
+const goalPeriod = ref('week')
+const goalTarget = ref(7)
+const selectedColor = ref('')
 
-const isFormOpen = ref(false)
+watch(goalPeriod, period => {
+  const maximum = goalMaximums[period]
+
+  if (goalTarget.value > maximum) {
+    goalTarget.value = maximum
+  }
+})
 
 const open = async () => {
-  isFormOpen.value = true
+  if (props.habit) {
+    name.value = props.habit.name
+    goalPeriod.value = props.habit.goal_period
+    goalTarget.value = props.habit.goal_target
+    selectedColor.value = props.habit.color
+  } else {
+    selectedColor.value = getRandomHabitColor()
+  }
+
+  dialogRef.value.showModal()
 
   await nextTick()
 
-  inputRef.value.focus()
+  inputRef.value?.focus()
 }
 
 const handleSubmit = () => {
+  const habitName = name.value.trim()
+
+  if (!habitName) return
+
+  if (props.habit) {
+    emit('habitUpdated', {
+      id: props.habit.id,
+      name: habitName,
+      color: selectedColor.value,
+      goal_period: goalPeriod.value,
+      goal_target: goalTarget.value,
+    })
+    return
+  }
+
   const habit = {
-    name: name.value,
+    name: habitName,
     active: true,
-    color: getRandomHabitColor(),
+    color: selectedColor.value,
     goalPeriod: goalPeriod.value,
     goalTarget: goalTarget.value,
   }
 
   emit('habitCreated', habit)
-  closeForm()
 }
 
-const closeForm = () => {
+const close = () => {
+  dialogRef.value.close()
+}
+
+defineExpose({ open, close })
+
+const selectGoalTarget = event => {
+  event.target.select()
+}
+
+const onDialogClose = () => {
+  resetForm()
+  emit('formClosed')
+}
+
+const resetForm = () => {
   name.value = ''
-  goalPeriod.value = 'day'
-  goalTarget.value = 1
-  isFormOpen.value = false
+  goalPeriod.value = 'week'
+  goalTarget.value = 7
+  selectedColor.value = ''
 }
 </script>
 
@@ -78,13 +150,13 @@ form {
   display: flex;
   flex: 1;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 input {
   flex: 1;
   height: 44px;
   padding: 0 12px;
-  margin-left: 8px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
 
@@ -97,6 +169,11 @@ input:focus {
   outline: none;
   border-color: #ddea7c;
   box-shadow: 0 0 0 3px rgba(221, 234, 124, 0.25);
+}
+
+input:invalid:focus {
+  border-color: #fca5a5;
+  box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.25);
 }
 
 .icon-button--add {
@@ -120,5 +197,34 @@ input:focus {
   justify-content: flex-end;
   display: flex;
   align-items: center;
+}
+
+.color-picker {
+  display: flex;
+  gap: 8px;
+}
+
+.color-option {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.color-option--selected {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+dialog {
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.2);
 }
 </style>

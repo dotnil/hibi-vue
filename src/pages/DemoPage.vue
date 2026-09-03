@@ -2,7 +2,13 @@
 <Header>
 
   <template #actions>
-    <HabitForm @habitCreated="onHabitCreated" />
+    <HabitForm
+      ref="habitFormRef"
+      :habit="editingHabit"
+      @habitCreated="onHabitCreated"
+      @habitUpdated="onHabitUpdated"
+      @formClosed="editingHabit = null"
+    />
   </template>
 
 
@@ -24,7 +30,7 @@
     :habitsDays="habitsDays"
     :days="period.days"
     :visibleDays="period.days.length"
-    @habitUpdated="onHabitUpdated"
+    @habitEditRequested="onHabitEditRequested"
     @habitDeleted="onHabitDeleted"
     @dayClicked="onDayClicked"
   />
@@ -32,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 
 import { demoHabits, demoMetrics } from '../demo'
 import { getLastDays, formatDate, makeHabitsDays } from '../dates'
@@ -43,6 +49,8 @@ import HabitList from '../components/HabitList.vue'
 
 const habits = ref(structuredClone(demoHabits))
 const metrics = ref(structuredClone(demoMetrics))
+const editingHabit = ref(null)
+const habitFormRef = ref(null)
 const props = defineProps({
   visibleDays: Number,
 })
@@ -61,11 +69,15 @@ const nextId = computed(() =>
   Math.max(0, ...habits.value.map(habit => habit.id)) + 1
 )
 
-const onHabitCreated = habit => {
+const onHabitCreated = ({ goalPeriod, goalTarget, ...habit }) => {
   habits.value.push({
     id: nextId.value,
     ...habit,
+    goal_period: goalPeriod,
+    goal_target: goalTarget,
   })
+
+  habitFormRef.value.close()
 }
 
 const onHabitUpdated = habit => {
@@ -74,6 +86,18 @@ const onHabitUpdated = habit => {
   if (!foundHabit) return
 
   foundHabit.name = habit.name
+  foundHabit.goal_period = habit.goal_period
+  foundHabit.goal_target = habit.goal_target
+  foundHabit.color = habit.color
+  habitFormRef.value.close()
+}
+
+const onHabitEditRequested = async habit => {
+  editingHabit.value = habit
+
+  await nextTick()
+
+  habitFormRef.value.open()
 }
 
 const onHabitDeleted = habit => {
