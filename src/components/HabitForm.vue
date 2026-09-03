@@ -1,75 +1,94 @@
 <template>
 <div class="toolbar">
-  <button class="icon-button icon-button--add" v-if="!isFormOpen" @click="open"></button>
+  <button class="icon-button icon-button--add" @click="open"></button>
 
-  <form v-else @submit.prevent="handleSubmit">
-    <input
-      v-model="name"
-      ref="inputRef"
-      type="text"
-      placeholder="habit name"
-      @keydown.esc="closeForm"
-    >
-    <input
-    v-model.number="goalTarget"
-    type="number"
-    min="1"
-    />
+  <dialog ref="dialogRef" @close="resetForm">
+    <form @submit.prevent="handleSubmit">
+      <input
+        v-model="name"
+        ref="inputRef"
+        type="text"
+        placeholder="habit name"
+      >
+      <input
+        v-model.number="goalTarget"
+        type="number"
+        min="1"
+      />
 
-    <select v-model="goalPeriod">
-      <option value="day">day</option>
-      <option value="week">week</option>
-      <option value="month">month</option>
-    </select>
+      <select v-model="goalPeriod">
+        <option value="day">day</option>
+        <option value="week">week</option>
+        <option value="month">month</option>
+      </select>
 
-    <button class="icon-button icon-button--done" type="submit">
-    </button>
+      <div class="color-picker" aria-label="Habit color">
+        <button
+          v-for="color in habitColors"
+          :key="color"
+          class="color-option"
+          :class="{ 'color-option--selected': selectedColor === color }"
+          :style="{ backgroundColor: color }"
+          :aria-label="color"
+          type="button"
+          @click="selectedColor = color"
+        ></button>
+      </div>
 
-    <button class="icon-button icon-button--close" type="button" @click="closeForm">
-    </button>
-  </form>
+      <button class="icon-button icon-button--done" type="submit">
+      </button>
+
+      <button class="icon-button icon-button--close" type="button" @click="close">
+      </button>
+    </form>
+  </dialog>
 </div>
 </template>
 
 <script setup>
 import { ref, nextTick } from 'vue'
-import { getRandomHabitColor } from '../habit-colors'
+import { habitColors, getRandomHabitColor } from '../habit-colors'
 
 const inputRef = ref(null)
+const dialogRef = ref(null)
 const emit = defineEmits(['habitCreated'])
 
 const name = ref('')
 const goalPeriod = ref('day')
 const goalTarget = ref(1)
-
-const isFormOpen = ref(false)
+const selectedColor = ref('')
 
 const open = async () => {
-  isFormOpen.value = true
+  selectedColor.value = getRandomHabitColor()
+  dialogRef.value.showModal()
 
   await nextTick()
 
-  inputRef.value.focus()
+  inputRef.value?.focus()
 }
 
 const handleSubmit = () => {
   const habit = {
     name: name.value,
     active: true,
-    color: getRandomHabitColor(),
+    color: selectedColor.value,
     goalPeriod: goalPeriod.value,
     goalTarget: goalTarget.value,
   }
 
   emit('habitCreated', habit)
-  closeForm()
+  close()
 }
 
-const closeForm = () => {
+const close = () => {
+  dialogRef.value.close()
+}
+
+const resetForm = () => {
   name.value = ''
   goalPeriod.value = 'day'
   goalTarget.value = 1
-  isFormOpen.value = false
+  selectedColor.value = ''
 }
 </script>
 
@@ -78,13 +97,13 @@ form {
   display: flex;
   flex: 1;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 input {
   flex: 1;
   height: 44px;
   padding: 0 12px;
-  margin-left: 8px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
 
@@ -120,5 +139,34 @@ input:focus {
   justify-content: flex-end;
   display: flex;
   align-items: center;
+}
+
+.color-picker {
+  display: flex;
+  gap: 8px;
+}
+
+.color-option {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.color-option--selected {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+dialog {
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.2);
 }
 </style>
