@@ -61,10 +61,12 @@ const nextId = computed(() =>
   Math.max(0, ...habits.value.map(habit => habit.id)) + 1
 )
 
-const onHabitCreated = habit => {
+const onHabitCreated = ({ goalPeriod, goalTarget, ...habit }) => {
   habits.value.push({
     id: nextId.value,
     ...habit,
+    goal_period: goalPeriod,
+    goal_target: goalTarget,
   })
 }
 
