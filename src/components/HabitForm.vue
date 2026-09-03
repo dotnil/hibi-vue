@@ -33,6 +33,7 @@
 
 <script setup>
 import { ref, nextTick } from 'vue'
+import { getRandomHabitColor } from '../habit-colors'
 
 const inputRef = ref(null)
 const emit = defineEmits(['habitCreated'])
@@ -55,6 +56,7 @@ const handleSubmit = () => {
   const habit = {
     name: name.value,
     active: true,
+    color: getRandomHabitColor(),
     goalPeriod: goalPeriod.value,
     goalTarget: goalTarget.value,
   }

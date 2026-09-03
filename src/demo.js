@@ -6,24 +6,28 @@ export const demoHabits = [
   {
     id: 1,
     name: 'Drink protein',
+    color: '#DDEA7C',
     goal_period: 'week',
     goal_target: 4,
   },
   {
     id: 2,
     name: 'Read 20 min',
+    color: '#A8F8E4',
     goal_period: 'week',
     goal_target: 5,
   },
   {
     id: 3,
     name: 'Walk 30 min',
+    color: '#FFD0B5',
     goal_period: 'week',
     goal_target: 7,
   },
   {
     id: 4,
     name: 'Meditate',
+    color: '#DDC7FF',
     goal_period: 'day',
     goal_target: 1,
   },
