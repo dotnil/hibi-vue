@@ -18,34 +18,22 @@
 
     <div class="habit-row__info">
       <div class="habit-name">
-        <span 
-          v-if="!isEditing"
+        <span
           class="habit-name-text"
-          @click="startEdit"
-          >
+          @click="emit('habitEditRequested', habit)"
+        >
           {{ habit.name }}
         </span>
-        <input
-        v-else
-        ref="inputRef"
-        v-model="editingName"
-        class="edit-input"
-        @keydown.enter.prevent="save"
-        @keydown.esc.prevent="cancelEdit"
-        @blur="save"
-        />
 
         <div class="habit-goal">
           {{ habit.goal_target }}/{{ habit.goal_period }}
         </div>
 
         <div class="habit-actions">
-          <button 
-            v-if="!isEditing"
+          <button
             class="icon-button icon-button--edit"
             @click="emit('habitEditRequested', habit)"
-            ></button>
-          <button v-else class="icon-button icon-button--done" @click="save"></button>
+          ></button>
           <button class="icon-button icon-button--delete" @click="emit('habitDeleted', habit)"></button>
         </div>
       </div>
@@ -54,10 +42,9 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const emit = defineEmits([
-  'habitUpdated',
   'habitEditRequested',
   'habitDeleted',
   'dayClicked'
@@ -66,45 +53,6 @@ const emit = defineEmits([
 const { habit } = defineProps({
   habit: Object
 })
-
-const isEditing = ref(false)
-const editingName = ref('')
-
-const inputRef = ref(null)
-
-const startEdit = () => {
-  isEditing.value = true
-  editingName.value = habit.name
-
-  nextTick(() => {
-    setTimeout(() => {
-      inputRef.value?.focus()
-      inputRef.value?.select()
-    }, 50)
-  })
-}
-
-const cancelEdit = () => {
-  isEditing.value = false
-  editingName.value = ''
-}
-
-const save = () => {
-  const name = editingName.value.trim()
-
-  if (name) {
-    emit('habitUpdated', {
-      id: habit.id,
-      name,
-      color: habit.color,
-      goal_period: habit.goal_period,
-      goal_target: habit.goal_target
-    })
-  }
-
-  isEditing.value = false
-  editingName.value = ''
-}
 
 const onDayClick = (index) => {
   emit('dayClicked', {
@@ -250,24 +198,6 @@ onUnmounted(() => {
   opacity: 1;
 }
 
-.edit-input {
-  width: 100%;
-  height: 24px;
-
-  margin: 0;
-  padding: 0 8px;
-
-  border: 0;
-  outline: none;
-  background: transparent;
-
-  font: inherit;
-  line-height: 24px;
-
-  color: inherit;
-  box-sizing: border-box;
-}
-
 .habit-day {
   display: flex;
   justify-content: center;
@@ -295,11 +225,6 @@ onUnmounted(() => {
 
 .icon-button--edit {
   background: url("@/assets/icons/edit-25.svg") no-repeat center;
-  background-size: contain;
-}
-
-.icon-button--done {
-  background: url("@/assets/icons/done-48.svg") no-repeat center;
   background-size: contain;
 }
 
