@@ -9,11 +9,14 @@
         ref="inputRef"
         type="text"
         placeholder="habit name"
+        required
       >
       <input
         v-model.number="goalTarget"
         type="number"
         min="1"
+        :max="goalMaximums[goalPeriod]"
+        @focus="selectGoalTarget"
       />
 
       <select v-model="goalPeriod">
@@ -46,17 +49,31 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, watch } from 'vue'
 import { habitColors, getRandomHabitColor } from '../habit-colors'
 
 const inputRef = ref(null)
 const dialogRef = ref(null)
 const emit = defineEmits(['habitCreated'])
 
+const goalMaximums = {
+  day: 1,
+  week: 7,
+  month: 28,
+}
+
 const name = ref('')
-const goalPeriod = ref('day')
-const goalTarget = ref(1)
+const goalPeriod = ref('week')
+const goalTarget = ref(7)
 const selectedColor = ref('')
+
+watch(goalPeriod, period => {
+  const maximum = goalMaximums[period]
+
+  if (goalTarget.value > maximum) {
+    goalTarget.value = maximum
+  }
+})
 
 const open = async () => {
   selectedColor.value = getRandomHabitColor()
@@ -68,8 +85,12 @@ const open = async () => {
 }
 
 const handleSubmit = () => {
+  const habitName = name.value.trim()
+
+  if (!habitName) return
+
   const habit = {
-    name: name.value,
+    name: habitName,
     active: true,
     color: selectedColor.value,
     goalPeriod: goalPeriod.value,
@@ -84,10 +105,14 @@ const close = () => {
   dialogRef.value.close()
 }
 
+const selectGoalTarget = event => {
+  event.target.select()
+}
+
 const resetForm = () => {
   name.value = ''
-  goalPeriod.value = 'day'
-  goalTarget.value = 1
+  goalPeriod.value = 'week'
+  goalTarget.value = 7
   selectedColor.value = ''
 }
 </script>
@@ -116,6 +141,11 @@ input:focus {
   outline: none;
   border-color: #ddea7c;
   box-shadow: 0 0 0 3px rgba(221, 234, 124, 0.25);
+}
+
+input:invalid:focus {
+  border-color: #fca5a5;
+  box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.25);
 }
 
 .icon-button--add {
