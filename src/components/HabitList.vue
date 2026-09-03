@@ -16,7 +16,6 @@
       v-for="habit in habitsDays"
       :key="habit.id"
       :habit="habit"
-      @habit-updated="emit('habitUpdated', $event)"
       @habit-edit-requested="emit('habitEditRequested', $event)"
       @habit-deleted="emit('habitDeleted', $event)"
       @day-clicked="emit('dayClicked', $event)"
@@ -28,7 +27,6 @@
 import HabitRow from './HabitRow.vue'
 
 const emit = defineEmits({
-  habitUpdated: null,
   habitEditRequested: null,
   habitDeleted: null,
   dayClicked: null

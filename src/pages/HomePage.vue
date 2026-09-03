@@ -29,7 +29,6 @@
     :days="period.days"
     :visibleDays="period.days.length"
     @habitDeleted="onHabitDeleted"
-    @habitUpdated="onHabitUpdated"
     @habitEditRequested="onHabitEditRequested"
     @dayClicked="onDayClicked"
   />
@@ -90,6 +89,7 @@ const onHabitCreated = async (habit) => {
   try {
     await createHabit(habit)
     await loadHabits()
+    habitFormRef.value.close()
   } catch (error) {
     console.error('create habit failed:', error)
   }
@@ -99,11 +99,7 @@ const onHabitUpdated = async (habit) => {
   try {
     await updateHabit(habit)
     await loadHabits()
-
-    if (editingHabit.value) {
-      habitFormRef.value.close()
-      editingHabit.value = null
-    }
+    habitFormRef.value.close()
   } catch (error) {
     console.error('update habit failed:', error)
   }

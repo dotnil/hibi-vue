@@ -120,7 +120,6 @@ const handleSubmit = () => {
   }
 
   emit('habitCreated', habit)
-  close()
 }
 
 const close = () => {

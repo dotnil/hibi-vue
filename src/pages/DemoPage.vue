@@ -30,7 +30,6 @@
     :habitsDays="habitsDays"
     :days="period.days"
     :visibleDays="period.days.length"
-    @habitUpdated="onHabitUpdated"
     @habitEditRequested="onHabitEditRequested"
     @habitDeleted="onHabitDeleted"
     @dayClicked="onDayClicked"
@@ -77,6 +76,8 @@ const onHabitCreated = ({ goalPeriod, goalTarget, ...habit }) => {
     goal_period: goalPeriod,
     goal_target: goalTarget,
   })
+
+  habitFormRef.value.close()
 }
 
 const onHabitUpdated = habit => {
@@ -88,11 +89,7 @@ const onHabitUpdated = habit => {
   foundHabit.goal_period = habit.goal_period
   foundHabit.goal_target = habit.goal_target
   foundHabit.color = habit.color
-
-  if (editingHabit.value) {
-    habitFormRef.value.close()
-    editingHabit.value = null
-  }
+  habitFormRef.value.close()
 }
 
 const onHabitEditRequested = async habit => {
