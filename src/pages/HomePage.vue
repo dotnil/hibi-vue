@@ -2,7 +2,13 @@
 <Header>
 
   <template #actions>
-    <HabitForm @habitCreated="onHabitCreated" />
+    <HabitForm
+      ref="habitFormRef"
+      :habit="editingHabit"
+      @habitCreated="onHabitCreated"
+      @habitUpdated="onHabitUpdated"
+      @formClosed="editingHabit = null"
+    />
   </template>
 
 
@@ -24,12 +30,13 @@
     :visibleDays="period.days.length"
     @habitDeleted="onHabitDeleted"
     @habitUpdated="onHabitUpdated"
+    @habitEditRequested="onHabitEditRequested"
     @dayClicked="onDayClicked"
   />
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { logout } from '../api-client/users'
 import { useRouter } from 'vue-router'
 
@@ -44,6 +51,8 @@ import Header from '../components/Header.vue'
 
 const habits = ref([])
 const metrics = ref([])
+const editingHabit = ref(null)
+const habitFormRef = ref(null)
 
 const router = useRouter()
 
@@ -90,9 +99,22 @@ const onHabitUpdated = async (habit) => {
   try {
     await updateHabit(habit)
     await loadHabits()
+
+    if (editingHabit.value) {
+      habitFormRef.value.close()
+      editingHabit.value = null
+    }
   } catch (error) {
     console.error('update habit failed:', error)
   }
+}
+
+const onHabitEditRequested = async habit => {
+  editingHabit.value = habit
+
+  await nextTick()
+
+  habitFormRef.value.open()
 }
 
 const onHabitDeleted = async (habit) => {

@@ -43,7 +43,7 @@
           <button 
             v-if="!isEditing"
             class="icon-button icon-button--edit"
-            @click="startEdit"
+            @click="emit('habitEditRequested', habit)"
             ></button>
           <button v-else class="icon-button icon-button--done" @click="save"></button>
           <button class="icon-button icon-button--delete" @click="emit('habitDeleted', habit)"></button>
@@ -58,6 +58,7 @@ import { ref, nextTick, onMounted, onUnmounted } from 'vue'
 
 const emit = defineEmits([
   'habitUpdated',
+  'habitEditRequested',
   'habitDeleted',
   'dayClicked'
 ])

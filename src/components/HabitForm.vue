@@ -2,7 +2,7 @@
 <div class="toolbar">
   <button class="icon-button icon-button--add" @click="open"></button>
 
-  <dialog ref="dialogRef" @close="resetForm">
+  <dialog ref="dialogRef" @close="onDialogClose">
     <form @submit.prevent="handleSubmit">
       <input
         v-model="name"
@@ -54,7 +54,10 @@ import { habitColors, getRandomHabitColor } from '../habit-colors'
 
 const inputRef = ref(null)
 const dialogRef = ref(null)
-const emit = defineEmits(['habitCreated'])
+const emit = defineEmits(['habitCreated', 'habitUpdated', 'formClosed'])
+const props = defineProps({
+  habit: Object,
+})
 
 const goalMaximums = {
   day: 1,
@@ -76,7 +79,15 @@ watch(goalPeriod, period => {
 })
 
 const open = async () => {
-  selectedColor.value = getRandomHabitColor()
+  if (props.habit) {
+    name.value = props.habit.name
+    goalPeriod.value = props.habit.goal_period
+    goalTarget.value = props.habit.goal_target
+    selectedColor.value = props.habit.color
+  } else {
+    selectedColor.value = getRandomHabitColor()
+  }
+
   dialogRef.value.showModal()
 
   await nextTick()
@@ -88,6 +99,17 @@ const handleSubmit = () => {
   const habitName = name.value.trim()
 
   if (!habitName) return
+
+  if (props.habit) {
+    emit('habitUpdated', {
+      id: props.habit.id,
+      name: habitName,
+      color: selectedColor.value,
+      goal_period: goalPeriod.value,
+      goal_target: goalTarget.value,
+    })
+    return
+  }
 
   const habit = {
     name: habitName,
@@ -105,8 +127,15 @@ const close = () => {
   dialogRef.value.close()
 }
 
+defineExpose({ open, close })
+
 const selectGoalTarget = event => {
   event.target.select()
+}
+
+const onDialogClose = () => {
+  resetForm()
+  emit('formClosed')
 }
 
 const resetForm = () => {
