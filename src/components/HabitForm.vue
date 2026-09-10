@@ -12,17 +12,19 @@
         required
       >
       <input
+        v-if="goalPeriod !== 'day'"
         v-model.number="goalTarget"
         type="number"
         min="1"
         :max="goalMaximums[goalPeriod]"
+        required
         @focus="selectGoalTarget"
       />
 
       <select v-model="goalPeriod">
-        <option value="day">day</option>
-        <option value="week">week</option>
-        <option value="month">month</option>
+        <option value="day">Every day</option>
+        <option value="week">Days per week</option>
+        <option value="month">Days per month</option>
       </select>
 
       <div class="color-picker" aria-label="Habit color">
@@ -62,7 +64,7 @@ const props = defineProps({
 const goalMaximums = {
   day: 1,
   week: 7,
-  month: 28,
+  month: 31,
 }
 
 const name = ref('')
@@ -71,6 +73,11 @@ const goalTarget = ref(7)
 const selectedColor = ref('')
 
 watch(goalPeriod, period => {
+  if (period === 'day') {
+    goalTarget.value = 1
+    return
+  }
+
   const maximum = goalMaximums[period]
 
   if (goalTarget.value > maximum) {
