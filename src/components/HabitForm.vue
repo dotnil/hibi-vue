@@ -10,6 +10,7 @@
         type="text"
         placeholder="habit name"
         required
+        pattern=".*\S.*"
       >
       <input
         v-if="goalPeriod !== 'day'"
