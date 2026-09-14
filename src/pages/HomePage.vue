@@ -5,6 +5,7 @@
     <HabitForm
       ref="habitFormRef"
       :habit="editingHabit"
+      :defaultColor="defaultHabitColor"
       @habitCreated="onHabitCreated"
       @habitUpdated="onHabitUpdated"
       @formClosed="editingHabit = null"
@@ -43,6 +44,7 @@ import { createHabit, listHabits, updateHabit, deleteHabit } from '../api-client
 
 import { listMetrics, createMetric } from '../api-client/metrics'
 import { getLastDays, formatDate, getMetricsStartDate, makeHabitsDays } from '../dates'
+import { getNextHabitColor } from '../habit-colors'
 
 import HabitForm from '../components/HabitForm.vue'
 import HabitList from '../components/HabitList.vue'
@@ -123,6 +125,10 @@ const onHabitDeleted = async (habit) => {
 }
 
 const period = computed(() => getLastDays(new Date(), props.visibleDays))
+
+const defaultHabitColor = computed(() =>
+  getNextHabitColor(habits.value.at(-1)?.color)
+)
 
 const onDayClicked = async ({ habit, metricIndex, value }) => {
   const date = period.value.days[metricIndex]

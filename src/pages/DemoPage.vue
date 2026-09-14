@@ -5,6 +5,7 @@
     <HabitForm
       ref="habitFormRef"
       :habit="editingHabit"
+      :defaultColor="defaultHabitColor"
       @habitCreated="onHabitCreated"
       @habitUpdated="onHabitUpdated"
       @formClosed="editingHabit = null"
@@ -42,6 +43,7 @@ import { ref, computed, nextTick } from 'vue'
 
 import { demoHabits, demoMetrics } from '../demo'
 import { getLastDays, formatDate, makeHabitsDays } from '../dates'
+import { getNextHabitColor } from '../habit-colors'
 
 import Header from '../components/Header.vue'
 import HabitForm from '../components/HabitForm.vue'
@@ -56,6 +58,10 @@ const props = defineProps({
 })
 
 const period = computed(() => getLastDays(new Date(), props.visibleDays))
+
+const defaultHabitColor = computed(() =>
+  getNextHabitColor(habits.value.at(-1)?.color)
+)
 
 const habitsDays = computed(() =>
   makeHabitsDays(

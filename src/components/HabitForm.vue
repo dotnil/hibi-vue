@@ -53,13 +53,14 @@
 
 <script setup>
 import { ref, nextTick, watch } from 'vue'
-import { habitColors, getRandomHabitColor } from '../habit-colors'
+import { habitColors } from '../habit-colors'
 
 const inputRef = ref(null)
 const dialogRef = ref(null)
 const emit = defineEmits(['habitCreated', 'habitUpdated', 'formClosed'])
 const props = defineProps({
   habit: Object,
+  defaultColor: String,
 })
 
 const goalMaximums = {
@@ -93,7 +94,7 @@ const open = async () => {
     goalTarget.value = Number(props.habit.goal_target)
     selectedColor.value = props.habit.color
   } else {
-    selectedColor.value = getRandomHabitColor()
+    selectedColor.value = props.defaultColor
   }
 
   dialogRef.value.showModal()

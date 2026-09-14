@@ -5,8 +5,9 @@ export const habitColors = [
   '#DDC7FF',
 ]
 
-export const getRandomHabitColor = () => {
-  const index = Math.floor(Math.random() * habitColors.length)
+export const getNextHabitColor = (lastColor) => {
+  const lastIndex = habitColors.indexOf(lastColor)
+  const nextIndex = (lastIndex + 1) % habitColors.length
 
-  return habitColors[index]
+  return habitColors[nextIndex]
 }
