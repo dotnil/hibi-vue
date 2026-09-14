@@ -113,8 +113,29 @@ export const getCalendarPeriod = (period, date = new Date()) => {
   }
 }
 
-export const calculateProgress = (habit, metrics, period) => {
+export const getMetricsStartDate = (visibleStartDate, date = new Date()) => {
+  const weekStartDate = getCalendarPeriod('week', date).startDate
+  const monthStartDate = getCalendarPeriod('month', date).startDate
+
+  return [visibleStartDate, weekStartDate, monthStartDate].sort()[0]
+}
+
+const getEffectiveTarget = (habit, period) => {
   const target = Number(habit.goal_target)
+
+  if (habit.goal_period !== 'month') {
+    return target
+  }
+
+  const daysInMonth = (
+    new Date(period.endDate) - new Date(period.startDate)
+  ) / (24 * 60 * 60 * 1000)
+
+  return Math.min(target, daysInMonth)
+}
+
+export const calculateProgress = (habit, metrics, period) => {
+  const target = getEffectiveTarget(habit, period)
 
   const completed = metrics.filter(metric =>
     metric.habit_id === habit.id &&

@@ -10,19 +10,22 @@
         type="text"
         placeholder="habit name"
         required
+        pattern=".*\S.*"
       >
       <input
+        v-if="goalPeriod !== 'day'"
         v-model.number="goalTarget"
         type="number"
         min="1"
         :max="goalMaximums[goalPeriod]"
+        required
         @focus="selectGoalTarget"
       />
 
       <select v-model="goalPeriod">
-        <option value="day">day</option>
-        <option value="week">week</option>
-        <option value="month">month</option>
+        <option value="day">Every day</option>
+        <option value="week">Days per week</option>
+        <option value="month">Days per month</option>
       </select>
 
       <div class="color-picker" aria-label="Habit color">
@@ -50,19 +53,20 @@
 
 <script setup>
 import { ref, nextTick, watch } from 'vue'
-import { habitColors, getRandomHabitColor } from '../habit-colors'
+import { habitColors } from '../habit-colors'
 
 const inputRef = ref(null)
 const dialogRef = ref(null)
 const emit = defineEmits(['habitCreated', 'habitUpdated', 'formClosed'])
 const props = defineProps({
   habit: Object,
+  defaultColor: String,
 })
 
 const goalMaximums = {
   day: 1,
   week: 7,
-  month: 28,
+  month: 31,
 }
 
 const name = ref('')
@@ -71,6 +75,11 @@ const goalTarget = ref(7)
 const selectedColor = ref('')
 
 watch(goalPeriod, period => {
+  if (period === 'day') {
+    goalTarget.value = 1
+    return
+  }
+
   const maximum = goalMaximums[period]
 
   if (goalTarget.value > maximum) {
@@ -82,10 +91,10 @@ const open = async () => {
   if (props.habit) {
     name.value = props.habit.name
     goalPeriod.value = props.habit.goal_period
-    goalTarget.value = props.habit.goal_target
+    goalTarget.value = Number(props.habit.goal_target)
     selectedColor.value = props.habit.color
   } else {
-    selectedColor.value = getRandomHabitColor()
+    selectedColor.value = props.defaultColor
   }
 
   dialogRef.value.showModal()
