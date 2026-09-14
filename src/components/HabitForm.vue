@@ -90,7 +90,7 @@ const open = async () => {
   if (props.habit) {
     name.value = props.habit.name
     goalPeriod.value = props.habit.goal_period
-    goalTarget.value = props.habit.goal_target
+    goalTarget.value = Number(props.habit.goal_target)
     selectedColor.value = props.habit.color
   } else {
     selectedColor.value = getRandomHabitColor()
