@@ -42,7 +42,7 @@ import { useRouter } from 'vue-router'
 import { createHabit, listHabits, updateHabit, deleteHabit } from '../api-client/habits'
 
 import { listMetrics, createMetric } from '../api-client/metrics'
-import { getLastDays, formatDate, makeHabitsDays } from '../dates'
+import { getLastDays, formatDate, getMetricsStartDate, makeHabitsDays } from '../dates'
 
 import HabitForm from '../components/HabitForm.vue'
 import HabitList from '../components/HabitList.vue'
@@ -66,7 +66,7 @@ const loadHabits = async () => {
 
 const loadMetrics = async () => {
   metrics.value = await listMetrics(
-    period.value.startDate,
+    getMetricsStartDate(period.value.startDate),
     period.value.endDate
   )
 }

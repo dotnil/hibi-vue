@@ -113,6 +113,13 @@ export const getCalendarPeriod = (period, date = new Date()) => {
   }
 }
 
+export const getMetricsStartDate = (visibleStartDate, date = new Date()) => {
+  const weekStartDate = getCalendarPeriod('week', date).startDate
+  const monthStartDate = getCalendarPeriod('month', date).startDate
+
+  return [visibleStartDate, weekStartDate, monthStartDate].sort()[0]
+}
+
 const getEffectiveTarget = (habit, period) => {
   const target = Number(habit.goal_target)
 
