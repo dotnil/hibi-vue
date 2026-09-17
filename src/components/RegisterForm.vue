@@ -1,7 +1,8 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <input v-model="email" type="email" placeholder="email">
-    <input v-model="password" type="password" placeholder="password">
+    <input v-model.trim="email" type="email" placeholder="email" required>
+    <input v-model="password" type="password" placeholder="password" required @input="validateRepeatPassword">
+    <input ref="repeatPasswordRef" v-model="repeatPassword" type="password" placeholder="repeat password" required @input="validateRepeatPassword">
 
     <button type="submit">
       register
@@ -16,15 +17,20 @@ const emit = defineEmits(['register'])
 
 const email = ref('')
 const password = ref('')
+const repeatPassword = ref('')
+const repeatPasswordRef = ref(null)
+
+const validateRepeatPassword = () => {
+  repeatPasswordRef.value?.setCustomValidity(
+    password.value === repeatPassword.value ? '' : 'Passwords do not match'
+  )
+}
 
 const handleSubmit = () => {
   emit('register', {
-    email: email.value,
+    email: email.value.trim(),
     password: password.value,
   })
-
-  email.value = ''
-  password.value = ''
 }
 </script>
 
