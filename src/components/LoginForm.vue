@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <input v-model="email" type="email" placeholder="email">
-    <input v-model="password" type="password" placeholder="password">
+    <input v-model.trim="email" type="email" placeholder="email" required>
+    <input v-model="password" type="password" placeholder="password" required>
 
     <button type="submit">
       login
@@ -19,7 +19,7 @@ const password = ref('')
 
 const handleSubmit = () => {
   emit('login', {
-    email: email.value,
+    email: email.value.trim(),
     password: password.value,
   })
 }
