@@ -7,6 +7,8 @@
     <button type="submit">
       register
     </button>
+
+    <p v-if="props.errorMessage">{{ props.errorMessage }}</p>
   </form>
 </template>
 
@@ -14,6 +16,9 @@
 import { ref } from 'vue'
 
 const emit = defineEmits(['register'])
+const props = defineProps({
+  errorMessage: String,
+})
 
 const email = ref('')
 const password = ref('')

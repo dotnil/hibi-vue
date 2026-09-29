@@ -1,16 +1,20 @@
 <template>
   <h2>Login</h2>
-  <LoginForm @login="onLogin" />
+  <LoginForm :errorMessage="errorMessage" @login="onLogin" />
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import LoginForm from '../components/LoginForm.vue'
 import { login } from '../api-client/users'
 
 const router = useRouter()
+const errorMessage = ref('')
 
 const onLogin = async credentials => {
+  errorMessage.value = ''
+
   try {
     const result = await login(credentials)
 
@@ -21,6 +25,7 @@ const onLogin = async credentials => {
     await router.push('/')
   } catch (error) {
     console.error('login failed:', error)
+    errorMessage.value = error instanceof Error ? error.message : 'Login failed'
   }
 }
 </script>
