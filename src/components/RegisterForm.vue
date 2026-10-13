@@ -1,18 +1,48 @@
 <template>
-  <form @submit.prevent="handleSubmit">
+  <form novalidate @input="onFormInput" @submit.prevent="handleSubmit">
     <div class="field">
       <label for="register-email">Email</label>
-      <input id="register-email" v-model.trim="email" name="email" type="email" autocomplete="email" required>
+      <input
+        id="register-email"
+        v-model.trim="email"
+        :class="{ 'input-error': hasEmailError }"
+        :aria-invalid="hasEmailError"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+      >
+      <p class="field-error">{{ emailError }}</p>
     </div>
 
     <div class="field">
       <label for="register-password">Password</label>
-      <input id="register-password" v-model="password" name="password" type="password" autocomplete="new-password" required @input="validateRepeatPassword">
+      <input
+        id="register-password"
+        v-model="password"
+        :class="{ 'input-error': Boolean(passwordError) }"
+        :aria-invalid="Boolean(passwordError)"
+        name="password"
+        type="password"
+        autocomplete="new-password"
+        required
+      >
+      <p class="field-error">{{ passwordError }}</p>
     </div>
 
     <div class="field">
       <label for="register-repeat-password">Repeat password</label>
-      <input id="register-repeat-password" ref="repeatPasswordRef" v-model="repeatPassword" name="repeat-password" type="password" autocomplete="new-password" required @input="validateRepeatPassword">
+      <input
+        id="register-repeat-password"
+        v-model="repeatPassword"
+        :class="{ 'input-error': Boolean(repeatPasswordError) }"
+        :aria-invalid="Boolean(repeatPasswordError)"
+        name="repeat-password"
+        type="password"
+        autocomplete="new-password"
+        required
+      >
+      <p class="field-error">{{ repeatPasswordError }}</p>
     </div>
 
     <button type="submit">
@@ -24,9 +54,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-const emit = defineEmits(['register'])
+const emit = defineEmits(['register', 'formChanged'])
 const props = defineProps({
   errorMessage: String,
 })
@@ -34,15 +64,46 @@ const props = defineProps({
 const email = ref('')
 const password = ref('')
 const repeatPassword = ref('')
-const repeatPasswordRef = ref(null)
+const hasSubmitted = ref(false)
 
-const validateRepeatPassword = () => {
-  repeatPasswordRef.value?.setCustomValidity(
-    password.value === repeatPassword.value ? '' : 'Passwords do not match'
-  )
+const emailError = computed(() => {
+  if (!hasSubmitted.value) return ''
+
+  const trimmedEmail = email.value.trim()
+
+  if (!trimmedEmail) return 'Email is required'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) return 'Enter a valid email address'
+
+  return ''
+})
+
+const passwordError = computed(() => {
+  if (!hasSubmitted.value || password.value) return ''
+
+  return 'Password is required'
+})
+
+const repeatPasswordError = computed(() => {
+  if (!hasSubmitted.value) return ''
+  if (!repeatPassword.value) return 'Repeat password is required'
+  if (password.value !== repeatPassword.value) return 'Passwords do not match'
+
+  return ''
+})
+
+const hasEmailError = computed(() => (
+  Boolean(emailError.value) || props.errorMessage === 'Email already exists'
+))
+
+const onFormInput = () => {
+  emit('formChanged')
 }
 
 const handleSubmit = () => {
+  hasSubmitted.value = true
+
+  if (emailError.value || passwordError.value || repeatPasswordError.value) return
+
   emit('register', {
     email: email.value.trim(),
     password: password.value,
@@ -54,8 +115,7 @@ const handleSubmit = () => {
 form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin: 20px;
+  gap: 8px;
 }
 
 .field {
@@ -107,6 +167,25 @@ input:hover {
   outline: none;
   border-color: #ddea7c;
   box-shadow: 0 0 0 3px rgba(221, 234, 124, 0.25);
+}
+
+input.input-error,
+input.input-error:hover {
+  border-color: #fca5a5;
+  box-shadow: none;
+}
+
+input.input-error:focus {
+  border-color: #fca5a5;
+  box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.25);
+}
+
+.field-error {
+  min-height: 17px;
+  margin: 0;
+  color: #b91c1c;
+  font-size: 14px;
+  line-height: 17px;
 }
 
 .error-message {
