@@ -9,7 +9,7 @@ export const createUser = async credentials => {
 
   if (!response.ok) {
     const data = await response.json()
-    throw data
+    throw new Error(typeof data.error === 'string' ? data.error : 'Registration failed')
   }
 
   return response.json()
@@ -25,7 +25,7 @@ export const login = async credentials => {
 
   if (!response.ok) {
     const data = await response.json()
-    throw data
+    throw new Error(typeof data.error === 'string' ? data.error : 'Login failed')
   }
 
   return response.json()

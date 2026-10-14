@@ -3,6 +3,11 @@ export const habitColors = [
   '#A8F8E4',
   '#FFD0B5',
   '#DDC7FF',
+  '#f8c8dc',
+  '#f9e79f',
+  '#cfe8ff',
+  '#d8cff0',
+  '#bfb8b2',
 ]
 
 export const getNextHabitColor = (lastColor) => {
