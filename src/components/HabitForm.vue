@@ -4,11 +4,8 @@
 
   <dialog ref="dialogRef" @click.self="close" @close="onDialogClose">
     <form @submit.prevent="handleSubmit">
-      <div class="dialog-header">
+      <div class="dialog-header" :style="{ '--habit-color': selectedColor }">
         <h2>{{ props.habit ? 'Edit habit' : 'Create habit' }}</h2>
-      </div>
-
-      <div class="form-fields">
         <div class="field">
           <label for="habit-name">Habit name</label>
           <input
@@ -21,7 +18,9 @@
             pattern=".*\S.*"
           >
         </div>
+      </div>
 
+      <div class="form-fields">
         <div class="field">
           <label for="habit-period">Period</label>
           <select id="habit-period" v-model="goalPeriod">
@@ -31,7 +30,7 @@
           </select>
         </div>
 
-        <div v-if="goalPeriod !== 'day'" class="field">
+        <div class="field goal-field" :class="{ 'goal-field--hidden': goalPeriod === 'day' }">
           <label for="habit-target">Goal</label>
           <input
             id="habit-target"
@@ -39,6 +38,7 @@
             type="number"
             min="1"
             :max="goalMaximums[goalPeriod]"
+            :disabled="goalPeriod === 'day'"
             required
             @focus="selectGoalTarget"
           >
@@ -181,6 +181,12 @@ form {
   padding: 20px;
 }
 
+.dialog-header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .dialog-header h2 {
   margin: 0;
 }
@@ -195,6 +201,10 @@ form {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.goal-field--hidden {
+  visibility: hidden;
 }
 
 input,
@@ -286,5 +296,40 @@ dialog {
 
 dialog::backdrop {
   background: rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 640px) {
+  dialog {
+    width: calc(100% - 24px);
+    max-width: none;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+  }
+
+  form {
+    gap: 20px;
+    padding: 0;
+  }
+
+  .dialog-header {
+    gap: 16px;
+    padding: 16px;
+    background: var(--habit-color);
+    border-radius: 13px 13px 0 0;
+  }
+
+  .dialog-header input {
+    background: transparent;
+  }
+
+  .form-fields {
+    gap: 14px;
+    margin-inline: 16px;
+  }
+
+  .form-actions {
+    gap: 8px;
+    margin: 0 16px 16px;
+  }
 }
 </style>

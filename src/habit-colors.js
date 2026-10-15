@@ -5,7 +5,7 @@ export const habitColors = [
   '#DDC7FF',
   '#f8c8dc',
   '#f9e79f',
-  '#cfe8ff',
+  '#fffbe2',
   '#d8cff0',
   '#bfb8b2',
 ]
