@@ -2,7 +2,7 @@
 <div class="toolbar">
   <button class="icon-button icon-button--add" @click="open"></button>
 
-  <dialog ref="dialogRef" @close="onDialogClose">
+  <dialog ref="dialogRef" @click.self="close" @close="onDialogClose">
     <form @submit.prevent="handleSubmit">
       <div class="dialog-header">
         <h2>{{ props.habit ? 'Edit habit' : 'Create habit' }}</h2>
@@ -178,6 +178,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding: 20px;
 }
 
 .dialog-header h2 {
@@ -224,11 +225,6 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(221, 234, 124, 0.25);
 }
 
-input:invalid:focus {
-  border-color: #fca5a5;
-  box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.25);
-}
-
 .icon-button--add {
   background: url("@/assets/icons/add-24.svg") no-repeat center;
   background-size: contain;
@@ -255,6 +251,7 @@ input:invalid:focus {
 .color-picker {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .form-actions {
@@ -264,6 +261,7 @@ input:invalid:focus {
 }
 
 .color-option {
+  flex-shrink: 0;
   width: 28px;
   height: 28px;
   padding: 0;
@@ -280,8 +278,8 @@ input:invalid:focus {
 dialog {
   width: 500px;
   max-width: calc(100% - 48px);
+  padding: 0;
   margin: auto;
-  padding: 20px;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
 }
