@@ -4,48 +4,67 @@
 
   <dialog ref="dialogRef" @close="onDialogClose">
     <form @submit.prevent="handleSubmit">
-      <input
-        v-model="name"
-        ref="inputRef"
-        type="text"
-        placeholder="habit name"
-        required
-        pattern=".*\S.*"
-      >
-      <input
-        v-if="goalPeriod !== 'day'"
-        v-model.number="goalTarget"
-        type="number"
-        min="1"
-        :max="goalMaximums[goalPeriod]"
-        required
-        @focus="selectGoalTarget"
-      />
-
-      <select v-model="goalPeriod">
-        <option value="day">Every day</option>
-        <option value="week">Days per week</option>
-        <option value="month">Days per month</option>
-      </select>
-
-      <div class="color-picker" aria-label="Habit color">
-        <button
-          v-for="color in habitColors"
-          :key="color"
-          class="color-option"
-          :class="{ 'color-option--selected': selectedColor === color }"
-          :style="{ backgroundColor: color }"
-          :aria-label="color"
-          type="button"
-          @click="selectedColor = color"
-        ></button>
+      <div class="dialog-header">
+        <h2>{{ props.habit ? 'Edit habit' : 'Create habit' }}</h2>
       </div>
 
-      <button class="icon-button icon-button--done" type="submit">
-      </button>
+      <div class="form-fields">
+        <div class="field">
+          <label for="habit-name">Habit name</label>
+          <input
+            id="habit-name"
+            v-model="name"
+            ref="inputRef"
+            type="text"
+            placeholder="habit name"
+            required
+            pattern=".*\S.*"
+          >
+        </div>
 
-      <button class="icon-button icon-button--close" type="button" @click="close">
-      </button>
+        <div class="field">
+          <label for="habit-period">Period</label>
+          <select id="habit-period" v-model="goalPeriod">
+            <option value="day">Every day</option>
+            <option value="week">Days per week</option>
+            <option value="month">Days per month</option>
+          </select>
+        </div>
+
+        <div v-if="goalPeriod !== 'day'" class="field">
+          <label for="habit-target">Goal</label>
+          <input
+            id="habit-target"
+            v-model.number="goalTarget"
+            type="number"
+            min="1"
+            :max="goalMaximums[goalPeriod]"
+            required
+            @focus="selectGoalTarget"
+          >
+        </div>
+
+        <div class="field">
+          <span>Color</span>
+          <div class="color-picker" aria-label="Habit color">
+            <button
+              v-for="color in habitColors"
+              :key="color"
+              class="color-option"
+              :class="{ 'color-option--selected': selectedColor === color }"
+              :style="{ backgroundColor: color }"
+              :aria-label="color"
+              type="button"
+              @click="selectedColor = color"
+            ></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" @click="close">Cancel</button>
+        <button type="submit">{{ props.habit ? 'Save changes' : 'Create habit' }}</button>
+      </div>
     </form>
   </dialog>
 </div>
@@ -157,24 +176,49 @@ const resetForm = () => {
 <style scoped>
 form {
   display: flex;
-  flex: 1;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 24px;
 }
 
-input {
-  flex: 1;
+.dialog-header h2 {
+  margin: 0;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+input,
+select {
+  width: 100%;
   height: 44px;
   padding: 0 12px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-
   font-size: 16px;
-
   transition: border-color .2s ease, box-shadow .2s ease;
 }
 
-input:focus {
+select {
+  padding-right: 40px;
+  appearance: none;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+}
+
+input:focus,
+select:focus {
   outline: none;
   border-color: #ddea7c;
   box-shadow: 0 0 0 3px rgba(221, 234, 124, 0.25);
@@ -213,6 +257,12 @@ input:invalid:focus {
   gap: 8px;
 }
 
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
 .color-option {
   width: 28px;
   height: 28px;
@@ -228,6 +278,9 @@ input:invalid:focus {
 }
 
 dialog {
+  width: 500px;
+  max-width: calc(100% - 48px);
+  margin: auto;
   padding: 20px;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
