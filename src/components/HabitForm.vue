@@ -2,9 +2,9 @@
 <div class="toolbar">
   <button class="icon-button icon-button--add" @click="open"></button>
 
-  <dialog ref="dialogRef" @click.self="close" @close="onDialogClose">
+  <dialog ref="dialogRef" :style="{ '--habit-color': selectedColor }" @click.self="close" @close="onDialogClose">
     <form @submit.prevent="handleSubmit">
-      <div class="dialog-header" :style="{ '--habit-color': selectedColor }">
+      <div class="dialog-header">
         <h2>{{ props.habit ? 'Edit habit' : 'Create habit' }}</h2>
         <div class="field">
           <label for="habit-name">Habit name</label>
@@ -175,6 +175,8 @@ const resetForm = () => {
 
 <style scoped>
 form {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -231,8 +233,8 @@ select {
 input:focus,
 select:focus {
   outline: none;
-  border-color: #ddea7c;
-  box-shadow: 0 0 0 3px rgba(221, 234, 124, 0.25);
+  border-color: var(--habit-color);
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--habit-color) 50%, transparent)
 }
 
 .icon-button--add {
@@ -286,12 +288,43 @@ select:focus {
 }
 
 dialog {
+  position: relative;
   width: 500px;
   max-width: calc(100% - 48px);
   padding: 0;
   margin: auto;
-  border: 1px solid #e5e7eb;
+  border: 0px solid #e5e7eb;
   border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+dialog::before {
+  position: absolute;
+  top: -160px;
+  right: -10px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: var(--habit-color);
+  content: "";
+  pointer-events: none;
+}
+
+dialog[open] {
+  animation: dialog-open 300ms ease-out;
+}
+
+@keyframes dialog-open {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 dialog::backdrop {
@@ -314,12 +347,11 @@ dialog::backdrop {
   .dialog-header {
     gap: 16px;
     padding: 16px;
-    background: var(--habit-color);
     border-radius: 13px 13px 0 0;
   }
 
   .dialog-header input {
-    background: transparent;
+    background: #fff;
   }
 
   .form-fields {
@@ -330,6 +362,12 @@ dialog::backdrop {
   .form-actions {
     gap: 8px;
     margin: 0 16px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog[open] {
+    animation: none;
   }
 }
 </style>

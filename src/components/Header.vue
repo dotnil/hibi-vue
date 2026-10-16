@@ -10,7 +10,7 @@
 
 
   <Transition name="menu">
-    <div v-if="isMenuOpen" class="overlay">
+    <div v-if="isMenuOpen" class="overlay" @click.self="closeMenu">
 
       <aside class="menu" @click.stop>
 
