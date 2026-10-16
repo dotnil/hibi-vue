@@ -10,8 +10,8 @@
           <label for="habit-name">Habit name</label>
           <input
             id="habit-name"
-            v-model="name"
             ref="inputRef"
+            v-model="name"
             type="text"
             placeholder="habit name"
             required
@@ -30,7 +30,7 @@
           </select>
         </div>
 
-        <div class="field goal-field" :class="{ 'goal-field--hidden': goalPeriod === 'day' }">
+        <div class="field" :class="{ 'field--hidden': goalPeriod === 'day' }">
           <label for="habit-target">Goal</label>
           <input
             id="habit-target"
@@ -174,6 +174,51 @@ const resetForm = () => {
 </script>
 
 <style scoped>
+.toolbar {
+  display: flex;
+  flex: 1;
+  min-height: 44px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.icon-button--add {
+  background: url("@/assets/icons/add-24.svg") no-repeat center;
+  background-size: contain;
+}
+
+dialog {
+  position: relative;
+  width: 500px;
+  max-width: calc(100% - 48px);
+  padding: 0;
+  margin: auto;
+  overflow: hidden;
+  background: #fff;
+  border: 0;
+  border-radius: 14px;
+}
+
+dialog::before {
+  position: absolute;
+  top: -160px;
+  right: -10px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: var(--habit-color);
+  content: '';
+  pointer-events: none;
+}
+
+dialog[open] {
+  animation: dialog-open 300ms ease-out;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.2);
+}
+
 form {
   position: relative;
   z-index: 1;
@@ -205,7 +250,7 @@ form {
   gap: 6px;
 }
 
-.goal-field--hidden {
+.field--hidden {
   visibility: hidden;
 }
 
@@ -234,42 +279,13 @@ input:focus,
 select:focus {
   outline: none;
   border-color: var(--habit-color);
-  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--habit-color) 50%, transparent)
-}
-
-.icon-button--add {
-  background: url("@/assets/icons/add-24.svg") no-repeat center;
-  background-size: contain;
-}
-
-.icon-button--done {
-  background: url("@/assets/icons/done-48.svg") no-repeat center;
-  background-size: contain;
-}
-
-.icon-button--close {
-  background: url("@/assets/icons/close-25.svg") no-repeat center;
-  background-size: contain;
-}
-
-.toolbar {
-  flex: 1;
-  min-height: 44px;
-  justify-content: flex-end;
-  display: flex;
-  align-items: center;
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--habit-color) 50%, transparent);
 }
 
 .color-picker {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
 }
 
 .color-option {
@@ -287,48 +303,10 @@ select:focus {
   outline-offset: 2px;
 }
 
-dialog {
-  position: relative;
-  width: 500px;
-  max-width: calc(100% - 48px);
-  padding: 0;
-  margin: auto;
-  border: 0px solid #e5e7eb;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #fff;
-}
-
-dialog::before {
-  position: absolute;
-  top: -160px;
-  right: -10px;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: var(--habit-color);
-  content: "";
-  pointer-events: none;
-}
-
-dialog[open] {
-  animation: dialog-open 300ms ease-out;
-}
-
-@keyframes dialog-open {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.2);
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 @media (max-width: 640px) {
@@ -368,6 +346,18 @@ dialog::backdrop {
 @media (prefers-reduced-motion: reduce) {
   dialog[open] {
     animation: none;
+  }
+}
+
+@keyframes dialog-open {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 </style>
