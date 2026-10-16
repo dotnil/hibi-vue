@@ -7,7 +7,7 @@
         :key="day.toISOString()"
         class="header-day"
         :class="{ 'header-day--today': isToday(day) }"
-        >
+      >
         <div>{{ day.getDate() }}</div>
         <div>{{ formatWeekday(day) }}</div>
       </div>
@@ -29,13 +29,13 @@ import HabitRow from './HabitRow.vue'
 const emit = defineEmits({
   habitEditRequested: null,
   habitDeleted: null,
-  dayClicked: null
+  dayClicked: null,
 })
 
 defineProps({
   habitsDays: Array,
   days: Array,
-  visibleDays: Number
+  visibleDays: Number,
 })
 
 const isToday = (date) => {
@@ -45,19 +45,16 @@ const isToday = (date) => {
 const formatWeekday = (date) =>
   date
     .toLocaleDateString('en', {
-      weekday: 'short'
+      weekday: 'short',
     })
     .slice(0, 2)
-
 </script>
 
 <style scoped>
 .habit-table {
   margin: 0 20px;
 
-  --habit-columns:
-    minmax(120px, 2fr)
-    repeat(var(--days-count), 0.5fr);
+  --habit-columns: minmax(120px, 2fr) repeat(var(--days-count), 0.5fr);
 }
 
 .habit-table__header {
@@ -82,7 +79,7 @@ const formatWeekday = (date) =>
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #6B7280;
+  color: #6b7280;
   font-weight: 300;
   font-size: 10px;
 }
@@ -100,5 +97,4 @@ const formatWeekday = (date) =>
   font-weight: 700;
   color: #111827;
 }
-
 </style>

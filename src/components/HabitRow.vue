@@ -1,7 +1,10 @@
 <template>
   <div class="habit-table__row" ref="rowRef">
     <div class="habit-row__days">
-      <div class="habit-progress" :style="{ '--progress': habit.progress, '--habit-color': habit.color }">
+      <div
+        class="habit-progress"
+        :style="{ '--progress': habit.progress, '--habit-color': habit.color }"
+      >
         <div class="progress-circle"></div>
         <div class="progress-value">{{ habit.progress }}%</div>
       </div>
@@ -18,23 +21,21 @@
 
     <div class="habit-row__info">
       <div class="habit-name">
-        <span
-          class="habit-name-text"
-          @click="emit('habitEditRequested', habit)"
-        >
+        <span class="habit-name-text" @click="emit('habitEditRequested', habit)">
           {{ habit.name }}
         </span>
 
-        <div class="habit-goal">
-          {{ habit.goal_target }}/{{ habit.goal_period }}
-        </div>
+        <div class="habit-goal">{{ habit.goal_target }}/{{ habit.goal_period }}</div>
 
         <div class="habit-actions">
           <button
             class="icon-button icon-button--edit"
             @click="emit('habitEditRequested', habit)"
           ></button>
-          <button class="icon-button icon-button--delete" @click="emit('habitDeleted', habit)"></button>
+          <button
+            class="icon-button icon-button--delete"
+            @click="emit('habitDeleted', habit)"
+          ></button>
         </div>
       </div>
     </div>
@@ -44,32 +45,25 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const emit = defineEmits([
-  'habitEditRequested',
-  'habitDeleted',
-  'dayClicked'
-])
+const emit = defineEmits(['habitEditRequested', 'habitDeleted', 'dayClicked'])
 
 const { habit } = defineProps({
-  habit: Object
+  habit: Object,
 })
 
 const onDayClick = (index) => {
   emit('dayClicked', {
     habit,
     metricIndex: index,
-    value: !habit.metrics[index]
+    value: !habit.metrics[index],
   })
 }
 
 const rowRef = ref(null)
 
-const observer = new ResizeObserver(entries => {
+const observer = new ResizeObserver((entries) => {
   for (const entry of entries) {
-    entry.target.style.setProperty(
-      '--card-size',
-      `${entry.contentRect.width}px`
-    )
+    entry.target.style.setProperty('--card-size', `${entry.contentRect.width}px`)
   }
 })
 
@@ -90,7 +84,7 @@ onUnmounted(() => {
   border: 1px solid #e5e7eb;
   border-radius: 14px;
 
-  transition: box-shadow .2s ease;
+  transition: box-shadow 0.2s ease;
   position: relative;
   overflow: hidden;
 }
@@ -154,22 +148,22 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
 
-  min-width:0;
+  min-width: 0;
   flex: 1;
   gap: 12px;
 }
 
 .habit-goal {
-  flex-shrink:0;
-  white-space:nowrap;
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 0.8rem;
   color: #6b7280;
   opacity: 0;
-  transition: opacity .15s ease;
+  transition: opacity 0.15s ease;
 }
 
 .habit-table__row:hover .habit-goal {
-  opacity: .7;
+  opacity: 0.7;
 }
 
 .habit-name-text {
@@ -189,9 +183,9 @@ onUnmounted(() => {
   display: flex;
   gap: 8px;
 
-  flex-shrink:0;
+  flex-shrink: 0;
   opacity: 0;
-  transition: opacity .15s ease;
+  transition: opacity 0.15s ease;
 }
 
 .habit-table__row:hover .habit-actions {
@@ -216,7 +210,7 @@ onUnmounted(() => {
   border: none;
   cursor: pointer;
   transition: transform 0.2s;
-  opacity: .55;
+  opacity: 0.55;
 }
 
 .icon-button:hover {
@@ -224,12 +218,12 @@ onUnmounted(() => {
 }
 
 .icon-button--edit {
-  background: url("@/assets/icons/edit-25.svg") no-repeat center;
+  background: url('@/assets/icons/edit-25.svg') no-repeat center;
   background-size: contain;
 }
 
 .icon-button--delete {
-  background: url("@/assets/icons/delete-25.svg") no-repeat center;
+  background: url('@/assets/icons/delete-25.svg') no-repeat center;
   background-size: contain;
 }
 
@@ -238,14 +232,14 @@ onUnmounted(() => {
   height: 20px;
 
   border: 0;
-  background: url("@/assets/icons/icon-circle-20.svg") no-repeat center;
+  background: url('@/assets/icons/icon-circle-20.svg') no-repeat center;
   background-size: contain;
 
-  transition: transform .15s ease;
+  transition: transform 0.15s ease;
 }
 
 .metric--done {
-  background-image: url("@/assets/icons/done-bold-48.svg");
+  background-image: url('@/assets/icons/done-bold-48.svg');
 }
 
 .metric:hover {

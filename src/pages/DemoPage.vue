@@ -1,31 +1,22 @@
 <template>
-<Header>
+  <Header>
+    <template #actions>
+      <HabitForm
+        ref="habitFormRef"
+        :habit="editingHabit"
+        :defaultColor="defaultHabitColor"
+        @habitCreated="onHabitCreated"
+        @habitUpdated="onHabitUpdated"
+        @formClosed="editingHabit = null"
+      />
+    </template>
 
-  <template #actions>
-    <HabitForm
-      ref="habitFormRef"
-      :habit="editingHabit"
-      :defaultColor="defaultHabitColor"
-      @habitCreated="onHabitCreated"
-      @habitUpdated="onHabitUpdated"
-      @formClosed="editingHabit = null"
-    />
-  </template>
+    <template #menu>
+      <RouterLink to="/login"> Login </RouterLink>
 
-
-  <template #menu>
-
-    <RouterLink to="/login">
-      Login
-    </RouterLink>
-
-    <RouterLink to="/register">
-      Register
-    </RouterLink>
-
-  </template>
-
-</Header>
+      <RouterLink to="/register"> Register </RouterLink>
+    </template>
+  </Header>
 
   <HabitList
     :habitsDays="habitsDays"
@@ -35,7 +26,6 @@
     @habitDeleted="onHabitDeleted"
     @dayClicked="onDayClicked"
   />
-
 </template>
 
 <script setup>
@@ -59,21 +49,11 @@ const props = defineProps({
 
 const period = computed(() => getLastDays(new Date(), props.visibleDays))
 
-const defaultHabitColor = computed(() =>
-  getNextHabitColor(habits.value.at(-1)?.color)
-)
+const defaultHabitColor = computed(() => getNextHabitColor(habits.value.at(-1)?.color))
 
-const habitsDays = computed(() =>
-  makeHabitsDays(
-    habits.value,
-    metrics.value,
-    period.value.days
-  )
-)
+const habitsDays = computed(() => makeHabitsDays(habits.value, metrics.value, period.value.days))
 
-const nextId = computed(() =>
-  Math.max(0, ...habits.value.map(habit => habit.id)) + 1
-)
+const nextId = computed(() => Math.max(0, ...habits.value.map((habit) => habit.id)) + 1)
 
 const onHabitCreated = ({ goalPeriod, goalTarget, ...habit }) => {
   habits.value.push({
@@ -86,8 +66,8 @@ const onHabitCreated = ({ goalPeriod, goalTarget, ...habit }) => {
   habitFormRef.value.close()
 }
 
-const onHabitUpdated = habit => {
-  const foundHabit = habits.value.find(item => item.id === habit.id)
+const onHabitUpdated = (habit) => {
+  const foundHabit = habits.value.find((item) => item.id === habit.id)
 
   if (!foundHabit) return
 
@@ -98,7 +78,7 @@ const onHabitUpdated = habit => {
   habitFormRef.value.close()
 }
 
-const onHabitEditRequested = async habit => {
+const onHabitEditRequested = async (habit) => {
   editingHabit.value = habit
 
   await nextTick()
@@ -106,17 +86,14 @@ const onHabitEditRequested = async habit => {
   habitFormRef.value.open()
 }
 
-const onHabitDeleted = habit => {
-  habits.value = habits.value.filter(item => item.id !== habit.id)
+const onHabitDeleted = (habit) => {
+  habits.value = habits.value.filter((item) => item.id !== habit.id)
 }
 
 const onDayClicked = ({ habit, metricIndex, value }) => {
   const date = formatDate(period.value.days[metricIndex])
 
-  const metric = metrics.value.find(item =>
-    item.habit_id === habit.id &&
-    item.date === date
-  )
+  const metric = metrics.value.find((item) => item.habit_id === habit.id && item.date === date)
 
   if (metric) {
     metric.value = value

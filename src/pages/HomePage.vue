@@ -1,29 +1,22 @@
 <template>
-<Header>
+  <Header>
+    <template #actions>
+      <HabitForm
+        ref="habitFormRef"
+        :habit="editingHabit"
+        :defaultColor="defaultHabitColor"
+        @habitCreated="onHabitCreated"
+        @habitUpdated="onHabitUpdated"
+        @formClosed="editingHabit = null"
+      />
+    </template>
 
-  <template #actions>
-    <HabitForm
-      ref="habitFormRef"
-      :habit="editingHabit"
-      :defaultColor="defaultHabitColor"
-      @habitCreated="onHabitCreated"
-      @habitUpdated="onHabitUpdated"
-      @formClosed="editingHabit = null"
-    />
-  </template>
+    <template #menu>
+      <p>{{ props.currentUser.email }}</p>
 
-
-  <template #menu>
-
-    <p>{{ props.currentUser.email }}</p>
-
-    <button class="logout-button" @click="onLogout">
-      Logout
-    </button>
-
-  </template>
-
-</Header>
+      <button class="logout-button" @click="onLogout">Logout</button>
+    </template>
+  </Header>
 
   <HabitList
     :habitsDays="habitsDays"
@@ -69,7 +62,7 @@ const loadHabits = async () => {
 const loadMetrics = async () => {
   metrics.value = await listMetrics(
     getMetricsStartDate(period.value.startDate),
-    period.value.endDate
+    period.value.endDate,
   )
 }
 
@@ -107,7 +100,7 @@ const onHabitUpdated = async (habit) => {
   }
 }
 
-const onHabitEditRequested = async habit => {
+const onHabitEditRequested = async (habit) => {
   editingHabit.value = habit
 
   await nextTick()
@@ -126,9 +119,7 @@ const onHabitDeleted = async (habit) => {
 
 const period = computed(() => getLastDays(new Date(), props.visibleDays))
 
-const defaultHabitColor = computed(() =>
-  getNextHabitColor(habits.value.at(-1)?.color)
-)
+const defaultHabitColor = computed(() => getNextHabitColor(habits.value.at(-1)?.color))
 
 const onDayClicked = async ({ habit, metricIndex, value }) => {
   const date = period.value.days[metricIndex]
@@ -146,20 +137,11 @@ const onDayClicked = async ({ habit, metricIndex, value }) => {
   }
 }
 
-const habitsDays = computed(() =>
-  makeHabitsDays(
-    habits.value,
-    metrics.value,
-    period.value.days
-  )
-)
-
-
+const habitsDays = computed(() => makeHabitsDays(habits.value, metrics.value, period.value.days))
 </script>
-
 
 <style scoped>
 .logout-button {
-border: 1px solid #e5e7eb;
+  border: 1px solid #e5e7eb;
 }
 </style>

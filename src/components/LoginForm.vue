@@ -11,7 +11,7 @@
         type="email"
         autocomplete="email"
         required
-      >
+      />
       <p class="field-error">{{ emailError }}</p>
     </div>
 
@@ -26,13 +26,11 @@
         type="password"
         autocomplete="current-password"
         required
-      >
+      />
       <p class="field-error">{{ passwordError }}</p>
     </div>
 
-    <button type="submit">
-      login
-    </button>
+    <button type="submit">login</button>
 
     <p v-if="props.errorMessage" class="error-message" role="alert">{{ props.errorMessage }}</p>
   </form>
@@ -111,8 +109,8 @@ button {
   font-size: 14px;
   cursor: pointer;
   background: transparent;
-  color: #6B7280;
-  border: 1px solid #E5E7EB;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
 }
 
 button:hover {
@@ -128,7 +126,9 @@ input {
 
   font-size: 16px;
 
-  transition: border-color .2s ease, box-shadow .2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 input:focus {

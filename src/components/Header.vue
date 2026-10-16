@@ -1,38 +1,24 @@
 <template>
   <header class="header">
-    <button
-      class="icon-button icon-button--menu"
-      @click="toggleMenu"
-    ></button>
+    <button class="icon-button icon-button--menu" @click="toggleMenu"></button>
 
     <slot name="actions" />
   </header>
 
-
   <Transition name="menu">
     <div v-if="isMenuOpen" class="overlay" @click.self="closeMenu">
-
       <aside class="menu" @click.stop>
-
         <header class="menu-header">
-          <button
-            class="icon-button icon-button--menu"
-            @click="closeMenu"
-          ></button>
+          <button class="icon-button icon-button--menu" @click="closeMenu"></button>
         </header>
-
 
         <div class="menu-content">
           <slot name="menu" />
         </div>
-
-
       </aside>
-
     </div>
   </Transition>
 </template>
-
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
@@ -62,7 +48,6 @@ onUnmounted(() => {
 })
 </script>
 
-
 <style scoped>
 .header {
   position: sticky;
@@ -77,12 +62,10 @@ onUnmounted(() => {
   background: white;
 }
 
-
 .icon-button--menu {
-  background: url("@/assets/icons/icon-menu-20.svg") no-repeat center;
+  background: url('@/assets/icons/icon-menu-20.svg') no-repeat center;
   background-size: contain;
 }
-
 
 .overlay {
   position: fixed;
@@ -93,25 +76,22 @@ onUnmounted(() => {
   background: rgba(0, 0, 0, 0.2);
 }
 
-
 .menu {
   width: 260px;
   height: 100%;
   padding: 20px;
 
   background: white;
-  border-right: 1px solid #E5E7EB;
+  border-right: 1px solid #e5e7eb;
 
   position: relative;
   z-index: 31;
 }
 
-
 .menu-header {
   margin-bottom: 20px;
   min-height: 44px;
 }
-
 
 .menu-content {
   display: flex;
@@ -119,24 +99,20 @@ onUnmounted(() => {
   gap: 12px;
 }
 
-
 .menu-enter-active,
 .menu-leave-active {
   transition: opacity 0.2s ease;
 }
-
 
 .menu-enter-from,
 .menu-leave-to {
   opacity: 0;
 }
 
-
 .menu-enter-from .menu,
 .menu-leave-to .menu {
   transform: translateX(-100%);
 }
-
 
 /* Layers
 10 - sticky table header

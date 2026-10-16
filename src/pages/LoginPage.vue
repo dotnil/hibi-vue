@@ -26,7 +26,7 @@ const onFormChanged = () => {
   errorMessage.value = ''
 }
 
-const onLogin = async credentials => {
+const onLogin = async (credentials) => {
   errorMessage.value = ''
 
   try {

@@ -1,73 +1,78 @@
 <template>
-<div class="toolbar">
-  <button class="icon-button icon-button--add" @click="open"></button>
+  <div class="toolbar">
+    <button class="icon-button icon-button--add" @click="open"></button>
 
-  <dialog ref="dialogRef" :style="{ '--habit-color': selectedColor }" @click.self="close" @close="onDialogClose">
-    <form @submit.prevent="handleSubmit">
-      <div class="dialog-header">
-        <h2>{{ props.habit ? 'Edit habit' : 'Create habit' }}</h2>
-        <div class="field">
-          <label for="habit-name">Habit name</label>
-          <input
-            id="habit-name"
-            ref="inputRef"
-            v-model="name"
-            type="text"
-            placeholder="habit name"
-            required
-            pattern=".*\S.*"
-          >
-        </div>
-      </div>
-
-      <div class="form-fields">
-        <div class="field">
-          <label for="habit-period">Period</label>
-          <select id="habit-period" v-model="goalPeriod">
-            <option value="day">Every day</option>
-            <option value="week">Days per week</option>
-            <option value="month">Days per month</option>
-          </select>
-        </div>
-
-        <div class="field" :class="{ 'field--hidden': goalPeriod === 'day' }">
-          <label for="habit-target">Goal</label>
-          <input
-            id="habit-target"
-            v-model.number="goalTarget"
-            type="number"
-            min="1"
-            :max="goalMaximums[goalPeriod]"
-            :disabled="goalPeriod === 'day'"
-            required
-            @focus="selectGoalTarget"
-          >
-        </div>
-
-        <div class="field">
-          <span>Color</span>
-          <div class="color-picker" aria-label="Habit color">
-            <button
-              v-for="color in habitColors"
-              :key="color"
-              class="color-option"
-              :class="{ 'color-option--selected': selectedColor === color }"
-              :style="{ backgroundColor: color }"
-              :aria-label="color"
-              type="button"
-              @click="selectedColor = color"
-            ></button>
+    <dialog
+      ref="dialogRef"
+      :style="{ '--habit-color': selectedColor }"
+      @click.self="close"
+      @close="onDialogClose"
+    >
+      <form @submit.prevent="handleSubmit">
+        <div class="dialog-header">
+          <h2>{{ props.habit ? 'Edit habit' : 'Create habit' }}</h2>
+          <div class="field">
+            <label for="habit-name">Habit name</label>
+            <input
+              id="habit-name"
+              ref="inputRef"
+              v-model="name"
+              type="text"
+              placeholder="habit name"
+              required
+              pattern=".*\S.*"
+            />
           </div>
         </div>
-      </div>
 
-      <div class="form-actions">
-        <button type="button" @click="close">Cancel</button>
-        <button type="submit">{{ props.habit ? 'Save changes' : 'Create habit' }}</button>
-      </div>
-    </form>
-  </dialog>
-</div>
+        <div class="form-fields">
+          <div class="field">
+            <label for="habit-period">Period</label>
+            <select id="habit-period" v-model="goalPeriod">
+              <option value="day">Every day</option>
+              <option value="week">Days per week</option>
+              <option value="month">Days per month</option>
+            </select>
+          </div>
+
+          <div class="field" :class="{ 'field--hidden': goalPeriod === 'day' }">
+            <label for="habit-target">Goal</label>
+            <input
+              id="habit-target"
+              v-model.number="goalTarget"
+              type="number"
+              min="1"
+              :max="goalMaximums[goalPeriod]"
+              :disabled="goalPeriod === 'day'"
+              required
+              @focus="selectGoalTarget"
+            />
+          </div>
+
+          <div class="field">
+            <span>Color</span>
+            <div class="color-picker" aria-label="Habit color">
+              <button
+                v-for="color in habitColors"
+                :key="color"
+                class="color-option"
+                :class="{ 'color-option--selected': selectedColor === color }"
+                :style="{ backgroundColor: color }"
+                :aria-label="color"
+                type="button"
+                @click="selectedColor = color"
+              ></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" @click="close">Cancel</button>
+          <button type="submit">{{ props.habit ? 'Save changes' : 'Create habit' }}</button>
+        </div>
+      </form>
+    </dialog>
+  </div>
 </template>
 
 <script setup>
@@ -93,7 +98,7 @@ const goalPeriod = ref('week')
 const goalTarget = ref(7)
 const selectedColor = ref('')
 
-watch(goalPeriod, period => {
+watch(goalPeriod, (period) => {
   if (period === 'day') {
     goalTarget.value = 1
     return
@@ -156,7 +161,7 @@ const close = () => {
 
 defineExpose({ open, close })
 
-const selectGoalTarget = event => {
+const selectGoalTarget = (event) => {
   event.target.select()
 }
 
@@ -183,7 +188,7 @@ const resetForm = () => {
 }
 
 .icon-button--add {
-  background: url("@/assets/icons/add-24.svg") no-repeat center;
+  background: url('@/assets/icons/add-24.svg') no-repeat center;
   background-size: contain;
 }
 
@@ -262,7 +267,9 @@ select {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   font-size: 16px;
-  transition: border-color .2s ease, box-shadow .2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 select {

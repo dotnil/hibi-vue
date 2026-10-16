@@ -2,10 +2,12 @@
   <section class="auth-page">
     <div class="auth-card">
       <h2>Register</h2>
-      <RegisterForm :errorMessage="errorMessage" @register="onRegister" @formChanged="onFormChanged" />
-      <p class="auth-switch">
-        Already have an account? <RouterLink to="/login">Login</RouterLink>
-      </p>
+      <RegisterForm
+        :errorMessage="errorMessage"
+        @register="onRegister"
+        @formChanged="onFormChanged"
+      />
+      <p class="auth-switch">Already have an account? <RouterLink to="/login">Login</RouterLink></p>
       <p class="auth-home-link">
         <RouterLink to="/">Continue without an account</RouterLink>
       </p>
@@ -26,7 +28,7 @@ const onFormChanged = () => {
   errorMessage.value = ''
 }
 
-const onRegister = async credentials => {
+const onRegister = async (credentials) => {
   errorMessage.value = ''
 
   try {

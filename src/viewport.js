@@ -9,9 +9,7 @@ export const useVisibleDays = () => {
 
   const update = () => {
     visibleDays.value =
-      window.innerWidth < MOBILE_WIDTH
-        ? MOBILE_VISIBLE_DAYS
-        : DEFAULT_VISIBLE_DAYS
+      window.innerWidth < MOBILE_WIDTH ? MOBILE_VISIBLE_DAYS : DEFAULT_VISIBLE_DAYS
   }
 
   onMounted(() => {
