@@ -31,11 +31,6 @@ p {
   margin: 0;
 }
 
-form {
-  display: flex;
-  gap: 12px;
-}
-
 ul {
   margin: 0;
   padding: 0;
@@ -69,4 +64,3 @@ button:hover {
   opacity: 0.9;
   background: #ddea7c;
 }
-
