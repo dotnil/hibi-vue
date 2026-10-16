@@ -36,29 +36,22 @@ export const getLastDays = (date, visibleDays = DEFAULT_VISIBLE_DAYS) => {
 const isMetricSetForDateAndHabit = (metric, habitId, weekDate) => {
   const metricDate = new Date(metric.date)
 
-  return (
-    metric.habit_id === habitId &&
-    metricDate.toDateString() === weekDate.toDateString()
-  )
+  return metric.habit_id === habitId && metricDate.toDateString() === weekDate.toDateString()
 }
 
 export const makeHabitsDays = (habits, metrics, days) => {
-  return habits.map(habit => ({
+  return habits.map((habit) => ({
     ...habit,
 
-    metrics: days.map(day => {
-      const foundMetric = metrics.find(metric =>
-        isMetricSetForDateAndHabit(metric, habit.id, day)
+    metrics: days.map((day) => {
+      const foundMetric = metrics.find((metric) =>
+        isMetricSetForDateAndHabit(metric, habit.id, day),
       )
 
       return foundMetric ? foundMetric.value : false
     }),
 
-    progress: calculateProgress(
-      habit,
-      metrics,
-      getCalendarPeriod(habit.goal_period)
-    )
+    progress: calculateProgress(habit, metrics, getCalendarPeriod(habit.goal_period)),
   }))
 }
 
@@ -94,17 +87,9 @@ export const getCalendarPeriod = (period, date = new Date()) => {
   }
 
   if (period === 'month') {
-    const start = new Date(
-      current.getFullYear(),
-      current.getMonth(),
-      1
-    )
+    const start = new Date(current.getFullYear(), current.getMonth(), 1)
 
-    const end = new Date(
-      current.getFullYear(),
-      current.getMonth() + 1,
-      1
-    )
+    const end = new Date(current.getFullYear(), current.getMonth() + 1, 1)
 
     return {
       startDate: formatDate(start),
@@ -127,9 +112,8 @@ const getEffectiveTarget = (habit, period) => {
     return target
   }
 
-  const daysInMonth = (
-    new Date(period.endDate) - new Date(period.startDate)
-  ) / (24 * 60 * 60 * 1000)
+  const daysInMonth =
+    (new Date(period.endDate) - new Date(period.startDate)) / (24 * 60 * 60 * 1000)
 
   return Math.min(target, daysInMonth)
 }
@@ -137,19 +121,17 @@ const getEffectiveTarget = (habit, period) => {
 export const calculateProgress = (habit, metrics, period) => {
   const target = getEffectiveTarget(habit, period)
 
-  const completed = metrics.filter(metric =>
-    metric.habit_id === habit.id &&
-    metric.value === true &&
-    metric.date >= period.startDate &&
-    metric.date < period.endDate
+  const completed = metrics.filter(
+    (metric) =>
+      metric.habit_id === habit.id &&
+      metric.value === true &&
+      metric.date >= period.startDate &&
+      metric.date < period.endDate,
   ).length
 
   if (!target) {
     return 0
   }
 
-  return Math.min(
-    Math.round((completed / target) * 100),
-    100
-  )
+  return Math.min(Math.round((completed / target) * 100), 100)
 }

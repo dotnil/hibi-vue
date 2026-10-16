@@ -13,6 +13,8 @@
       devShell = pkgs.mkShell {
         buildInputs = [
           pkgs.nodejs_24
+          pkgs.oxfmt
+          pkgs.oxlint
         ];
         VITE_BACK = "http://localhost:3003";
       };
@@ -26,7 +28,7 @@
 
         src = self;
 
-        npmDepsHash = "sha256-A52hMgTrsEVMnvPK0M7+aUYnO6A+6Pa8XFuYzjU3SdM=";
+        npmDepsHash = "sha256-CZSx7sgvo3losunPMmFlTGSnvPhvCglPDba4Xym6Pvk=";
 
         VITE_BACK = "https://api.hibiflow.ru";
         npmBuild = "npm run build";

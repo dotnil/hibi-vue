@@ -1,5 +1,7 @@
 # hibi
 
+[![CI](https://github.com/dotnil/hibi-vue/actions/workflows/ci.yml/badge.svg)](https://github.com/dotnil/hibi-vue/actions/workflows/ci.yml)
+
 Проект **hibi** — это приложение для трекинга привычек  с недельной сеткой.
 
 **Demo:** https://hibiflow.ru

@@ -1,27 +1,17 @@
 <template>
   <div v-if="isLoading" class="skeleton" :style="{ '--days-count': DEFAULT_VISIBLE_DAYS }">
-
     <div class="skeleton__header"></div>
 
     <div class="skeleton__row" v-for="n in 5" :key="n">
       <div class="skeleton__habit"></div>
 
-      <div
-        v-for="day in visibleDays"
-        :key="day"
-        class="skeleton__day"
-        />
-      </div>
-
+      <div v-for="day in visibleDays" :key="day" class="skeleton__day" />
     </div>
+  </div>
 
-  <DemoPage v-else-if="!currentUser" :visibleDays="visibleDays"/>
+  <DemoPage v-else-if="!currentUser" :visibleDays="visibleDays" />
 
-  <HomePage
-    v-else
-    :currentUser="currentUser"
-    :visibleDays="visibleDays"
-  />
+  <HomePage v-else :currentUser="currentUser" :visibleDays="visibleDays" />
 </template>
 
 <script setup>

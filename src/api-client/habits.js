@@ -1,6 +1,6 @@
 const back = import.meta.env.VITE_BACK
 
-export const createHabit = async habit => {
+export const createHabit = async (habit) => {
   const response = await fetch(`${back}/habits`, {
     method: 'POST',
     credentials: 'include',
@@ -16,12 +16,12 @@ export const createHabit = async habit => {
   return response.json()
 }
 
-export const updateHabit = async habit => {
+export const updateHabit = async (habit) => {
   const payload = {
     name: habit.name,
     color: habit.color,
     goalPeriod: habit.goal_period,
-    goalTarget: habit.goal_target
+    goalTarget: habit.goal_target,
   }
 
   const response = await fetch(`${back}/habits/${habit.id}`, {
@@ -52,7 +52,7 @@ export const listHabits = async () => {
   return response.json()
 }
 
-export const deleteHabit = async id => {
+export const deleteHabit = async (id) => {
   const response = await fetch(`${back}/habits/${id}`, {
     method: 'DELETE',
     credentials: 'include',

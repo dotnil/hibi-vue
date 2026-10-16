@@ -11,7 +11,7 @@
         type="email"
         autocomplete="email"
         required
-      >
+      />
       <p class="field-error">{{ emailError }}</p>
     </div>
 
@@ -26,7 +26,7 @@
         type="password"
         autocomplete="new-password"
         required
-      >
+      />
       <p class="field-error">{{ passwordError }}</p>
     </div>
 
@@ -41,13 +41,11 @@
         type="password"
         autocomplete="new-password"
         required
-      >
+      />
       <p class="field-error">{{ repeatPasswordError }}</p>
     </div>
 
-    <button type="submit">
-      register
-    </button>
+    <button type="submit">register</button>
 
     <p v-if="props.errorMessage" class="error-message" role="alert">{{ props.errorMessage }}</p>
   </form>
@@ -91,9 +89,9 @@ const repeatPasswordError = computed(() => {
   return ''
 })
 
-const hasEmailError = computed(() => (
-  Boolean(emailError.value) || props.errorMessage === 'Email already exists'
-))
+const hasEmailError = computed(
+  () => Boolean(emailError.value) || props.errorMessage === 'Email already exists',
+)
 
 const onFormInput = () => {
   emit('formChanged')
@@ -137,8 +135,8 @@ button {
   font-size: 14px;
   cursor: pointer;
   background: transparent;
-  color: #6B7280;
-  border: 1px solid #E5E7EB;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
 }
 
 button:hover {
@@ -154,7 +152,9 @@ input {
 
   font-size: 16px;
 
-  transition: border-color .2s ease, box-shadow .2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 input:focus {

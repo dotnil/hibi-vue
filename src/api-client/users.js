@@ -1,6 +1,6 @@
 const back = import.meta.env.VITE_BACK
 
-export const createUser = async credentials => {
+export const createUser = async (credentials) => {
   const response = await fetch(`${back}/users`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -15,7 +15,7 @@ export const createUser = async credentials => {
   return response.json()
 }
 
-export const login = async credentials => {
+export const login = async (credentials) => {
   const response = await fetch(`${back}/sessions`, {
     method: 'POST',
     credentials: 'include',

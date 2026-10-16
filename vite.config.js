@@ -10,10 +10,13 @@ export default defineConfig({
   },
   server: {
     allowedHosts: ['hibi.lcl'],
-    port: 3000
+    port: 3000,
   },
   test: {
     globals: true,
     environment: 'jsdom',
+    env: {
+      VITE_BACK: 'http://backend.test',
+    },
   },
 })

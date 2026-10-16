@@ -1,6 +1,6 @@
 - don't use semicolons
 - prefer a functional style
-- write modern js: ES2025+, es modules
+- write modern js: ES2026+, es modules
 
 - use oxfmt for formatting, oxlint for linting
 - use vitest for testing
