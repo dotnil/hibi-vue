@@ -6,6 +6,9 @@
       <p class="auth-switch">
         Don't have an account? <RouterLink to="/register">Register</RouterLink>
       </p>
+      <p class="auth-home-link">
+        <RouterLink to="/">Continue without an account</RouterLink>
+      </p>
     </div>
   </section>
 </template>
@@ -76,5 +79,21 @@ h2 {
 
 .auth-switch a:hover {
   color: #111827;
+}
+
+.auth-home-link {
+  margin-top: 16px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.auth-home-link a {
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+.auth-home-link a:hover {
+  color: #6b7280;
+  text-decoration: underline;
 }
 </style>
